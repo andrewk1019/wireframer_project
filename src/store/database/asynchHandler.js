@@ -26,7 +26,8 @@ export const registerHandler = (newUser, firebase) => (dispatch, getState, { get
     ).then(resp => firestore.collection('users').doc(resp.user.uid).set({
         firstName: newUser.firstName,
         lastName: newUser.lastName,
-        initials: `${newUser.firstName[0]}${newUser.lastName[0]}`,
+        owner: newUser.email,
+        initials: `${newUser.firstName[0]}${newUser.lastName[0]}`, 
     })).then(() => {
         dispatch(actionCreators.registerSuccess);
     }).catch((err) => {
@@ -34,9 +35,10 @@ export const registerHandler = (newUser, firebase) => (dispatch, getState, { get
     });
 };
 
-export const updateRegister = (wireframe) => (dispatch, getState, { getFirestore }) => {
+export const updateRegister = (wireframe, owner1) => (dispatch, getState, { getFirestore }) => {
+  console.log(wireframe)
   var firestore = getFirestore();
-  firestore.collection("wireframes").doc(wireframe.id).update({name : wireframe.name, owner: wireframe.owner})
+  firestore.collection("wireframes").doc(wireframe.id).update({name : wireframe.name, owner: owner1})
 };
 
 export const submitRegister = (wireframe, t, a, d, c, history) => (dispatch, getState, { getFirestore }) => {
@@ -69,7 +71,7 @@ export const createRegister = (props) => (dispatch, getState, { getFirestore }) 
   const fireStore = getFirestore();
   fireStore.collection('wireframes').add({
     name: "Unknown",
-    owner: "Unknown",
+    owner: getState().firebase.auth.email,
     items: [],
     pos: -1}).then(
         function(docRef){

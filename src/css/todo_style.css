@@ -54,14 +54,27 @@ div.banner {
 .color_scheme{
   visibility: hidden;
 }
+#container:hover{
+  cursor: pointer;
+}
+.container1{
+  border-width: '1px';
+  border-style: 'solid';
+  position: 'relative'; 
+  top:'-10%';
+  height: '70px'; 
+  width: '100px'; 
+  left: '25%'; 
+  border-radius: '5px';
+}
 .colorer {
   position: absolute;
   height: 30px;
   width: 30px;
   border-radius: 50%;
   background-color: 'black';
-  top: 39.5%;
-  left: 73%;
+  top: 0%;
+  left: 50%;
 }
 .color_scheme1{
   visibility: hidden;
@@ -72,8 +85,8 @@ div.banner {
   width: 30px;
   border-radius: 50%;
   background-color: 'black';
-  top: 45.5%;
-  left: 73%;
+  top: 0%;
+  left: 50%;
 }
 .color_scheme2{
   visibility: hidden;
@@ -84,8 +97,11 @@ div.banner {
   width: 30px;
   border-radius: 50%;
   background-color: 'black';
-  top: 51.5%;
-  left: 73%;
+  top: 0%;
+  left: 50%;
+}
+.close:hover{
+  cursor: pointer;
 }
 .save{
   height: 32px;

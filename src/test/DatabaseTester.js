@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import todoJson from './TestTodoListData.json'
+import todoJson from './TestWireframeData.json'
 import { getFirestore } from 'redux-firestore';
 
 class DatabaseTester extends React.Component {
@@ -24,8 +24,9 @@ class DatabaseTester extends React.Component {
         todoJson.wireframes.forEach(todoListJson => {
             fireStore.collection('wireframes').add({
                     name: todoListJson.name,
-                    owner: todoListJson.owner,
-                    items: todoListJson.items,
+                    owner: "",
+                    admin: todoListJson.admin,
+                    items: todoListJson.controls,
                     pos: count++,
                 }).then(() => {
                     console.log("DATABASE RESET");
