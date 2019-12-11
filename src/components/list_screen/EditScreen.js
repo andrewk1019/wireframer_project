@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import ItemsList from './ItemsList.js'
-import { firestoreConnect } from 'react-redux-firebase';
+import { firestoreConnect, reactReduxFirebase } from 'react-redux-firebase';
 import { updateRegister } from '../../store/database/asynchHandler';
 import {moveToTopRegister } from '../../store/database/asynchHandler';
 import {sortTaskRegister } from '../../store/database/asynchHandler';
@@ -13,10 +13,12 @@ import {sortCompletedRegister } from '../../store/database/asynchHandler';
 import Draggable from 'react-draggable'; // The default
 
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
+import { isTSEnumMember } from '@babel/types';
 class EditScreen extends Component {
     state = {
         name: this.props.wireframe.name,
         owner: this.props.auth.email,
+        prev: null,
         items: [],
         selectedItem: null,
         type: '',
@@ -29,7 +31,12 @@ class EditScreen extends Component {
         thickness: 0,
         radius: 0,
         x: 0,
-        y: 0
+        y: 0,
+        count1: 0,
+        count2: 0,
+        count3: 0,
+        count4: 0,
+        totalCount: 0,
 
     }
 
@@ -63,7 +70,7 @@ class EditScreen extends Component {
             [target.id]: target.value,
         }));
         this.setState({
-            color1: target.value
+            color2: target.value
         })
     }
 
@@ -82,18 +89,77 @@ class EditScreen extends Component {
         e.preventDefault();
         this.props.history.push('/');
     }
-    chosenItem(e){
+    
+    handleStop(){
+        var item = this.state.selectedItem;
+        console.log(item)
+        var x = item.style.left;
+        var y = item.style.top;
         this.setState({
-            selectedItem: e.target
+            x: x,
+            y: y
         })
+
+    }
+    createContainer(e){
+        e.preventDefault();
+        var item = <Draggable><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{borderWidth: '1px', fontSize: '12pt', borderColor: 'black', textColor: 'black', borderStyle: 'solid', position: 'relative', top:'0px', height: '70px', width: '100px', left: '-5px', borderRadius: '5px'}}></div></Draggable>;
+        this.state.items[this.state.totalCount] = item;
+        var div = React.createElement('div', {}, this.state.items)
+        var count = this.state.count1 + 1;
+        this.state.totalCount = this.state.totalCount + 1;
+        this.setState({
+            count1: count
+        })
+        ReactDOM.render(div, document.getElementById('full_container'))
+    }
+
+    createLabel(e){
+        e.preventDefault();
+        var item = <Draggable><div id = {"label" + this.state.count2} onClick = {this.select.bind(this)} style={{position: 'relative', height: '50px', width: '200px', left: '-10px', top: '-0px'}}>Prompt for input:</div></Draggable>;
+        this.state.items[this.state.totalCount] = item;
+        var div = React.createElement('div', {}, this.state.items)
+        var count = this.state.count2 + 1;
+        this.state.totalCount = this.state.totalCount + 1;
+        this.setState({
+            count2: count
+        })
+        ReactDOM.render(div, document.getElementById('full_container'))
+    }
+
+    createButton(e){
+        e.preventDefault();
+        var item = <Draggable><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{borderWidth: '1px', borderStyle: 'solid', textAlign: 'center', paddingTop: '1.5%', position: 'relative', top:'1px', height: '35px', backgroundColor: 'grey', width: '120px', left: '-10px', borderRadius: '5px'}}>Submit</div></Draggable>;
+        this.state.items[this.state.totalCount] = item;
+        var div = React.createElement('div', {}, this.state.items)
+        var count = this.state.count3 + 1;
+        this.state.totalCount = this.state.totalCount + 1;
+        this.setState({
+            count3: count
+        })
+        ReactDOM.render(div, document.getElementById('full_container'))
+    }
+    createTextfield(e){
+        e.preventDefault();
+        var item = <Draggable><div id = {"input" + this.state.count4} onClick = {this.select.bind(this)} style={{ borderWidth: '1px', borderStyle: 'solid', borderColor: 'black', color: 'lightgrey', position: 'relative', height: '25px', width: '180px', left: '-10px', top: '0px', borderRadius: '5px'}}>Input</div></Draggable>;
+        this.state.items[this.state.totalCount] = item;
+        var div = React.createElement('div', {}, this.state.items)
+        var count = this.state.count3 + 1;
+        this.state.totalCount = this.state.totalCount + 1;
+        this.setState({
+            count4: count
+        })
+        ReactDOM.render(div, document.getElementById('full_container'))
+    }
+    select(e){
+        e.preventDefault();
+        this.state.selectedItem = e.target;
         var item = this.state.selectedItem
         var fontSize  = item.style.fontSize;
         var width = item.style.borderWidth;
         var radius = item.style.borderRadius;
         var x = item.style.left;
         var y = item.style.top;
-        console.log(x);
-        console.log(y);
         x = x.substring(0, x.length - 2);
         x = parseInt(x);
         y = y.substring(0, y.length - 2);
@@ -120,17 +186,6 @@ class EditScreen extends Component {
             })
         }
     }
-    createContainer(e){
-        e.preventDefault();
-        const title = React.createElement('div', {id: 'container1 draggable', onClick: this.chosenItem.bind(this), style:{borderWidth: '1px', fontSize: '12px', borderStyle: 'solid', position: 'relative', top:'0%', borderColor: 'black', backgroundColor: 'white', textColor: 'black', height: '70px', width: '100px', left: '-10px', top: '0px', borderRadius: '5px'}}, '');
-        const container = document.getElementById('second_column')
-        var item = ReactDOM.render(title, container);
-        this.setState({
-            selectedItem: item
-        })
-        return item.draggable();
-    }
-    
 
     render() {
         const auth = this.props.auth;
@@ -169,31 +224,32 @@ class EditScreen extends Component {
                         </div>
                         </span>
                         <div id = "container" onClick={this.createContainer.bind(this)} style={{borderWidth: '1px', borderStyle: 'solid', position: 'relative', top:'-10%', height: '70px', width: '100px', left: '25%', borderRadius: '5px'}}>
-
                         </div>
                         <div id = "container_name"style={{ position: 'relative', top:'-10%', left: '26%'}}>
                             <b>Container</b>
                         </div>
-                        <div id = "label" style={{position: 'relative', height: '50px', width: '200px', left: '10%', top: '-5%'}}>
+                        <div id = "label" onClick={this.createLabel.bind(this)} style={{position: 'relative', height: '50px', width: '200px', left: '10%', top: '-5%'}}>
                             Prompt for input:
                         </div>
                         <div id = "label_name"style={{ position: 'relative', top:'-10%', left: '40%'}}>
                             <b>Label</b>
                         </div>
-                        <div id = "submit" style={{borderWidth: '1px', borderStyle: 'solid', textAlign: 'center', paddingTop: '2.5%', position: 'relative', top:'-5%', height: '35px', backgroundColor: 'grey', width: '120px', left: '20%', borderRadius: '5px'}}>
+                        <div id = "submit" onClick = {this.createButton.bind(this)}style={{value: "Submit",borderWidth: '1px', borderStyle: 'solid', textAlign: 'center', paddingTop: '2.5%', position: 'relative', top:'-5%', height: '35px', backgroundColor: 'grey', width: '120px', left: '20%', borderRadius: '5px'}}>
                             Submit
                         </div>
                         <div id = "label_name"style={{ position: 'relative', top: '-5%', left: '35%'}}>
                             <b>Button</b>
                         </div>
-                        <div id = "textfield" style={{borderWidth: '1px', borderStyle: 'solid', borderColor: 'black', color: 'lightgrey', position: 'relative', height: '25px', width: '180px', left: '5%', borderRadius: '5px'}}>
+                        <div id = "textfield" onClick = {this.createTextfield.bind(this)} style={{borderWidth: '1px', borderStyle: 'solid', borderColor: 'black', color: 'lightgrey', position: 'relative', height: '25px', width: '180px', left: '5%', borderRadius: '5px'}}>
                             Input
                         </div>
                         <div id = "textfield_name"style={{ position: 'relative', left: '30%'}}>
                             <b>Textfield</b>
                         </div>
                     </div>
-                    <div className="col s10 m5" id = 'second_column' style={{borderStyle: 'solid', borderWidth: '3px', height:'600px'}}>
+                    <div className="second_column col s10 m5" style={{borderStyle: 'solid', borderWidth: '3px', height:'600px'}}>
+                        <div className = "full_container" id ="full_container">
+                        </div>
                     </div>
                     <div className="col s5 m4" style={{borderStyle: 'solid', borderWidth: '3px', height:'600px'}}>
                         Properties
