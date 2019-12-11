@@ -53,6 +53,8 @@ class EditScreen extends Component {
     }
 
     changeColor(e){
+        e.preventDefault();
+        if(this.state.selectedItem){
         const { target } = e;
         this.setState(state => ({
             ...state,
@@ -63,7 +65,10 @@ class EditScreen extends Component {
         })
         this.state.selectedItem.style.backgroundColor = target.value;
     }
+    }
     changeColor1(e){
+        e.preventDefault();
+        if(this.state.selectedItem){
         const { target } = e;
         this.setState(state => ({
             ...state,
@@ -74,8 +79,11 @@ class EditScreen extends Component {
         })
         this.state.selectedItem.style.borderColor = target.value;
     }
+    }
 
     changeColor2(e){
+        e.preventDefault();
+        if(this.state.selectedItem){
         const { target } = e;
         this.setState(state => ({
             ...state,
@@ -85,6 +93,7 @@ class EditScreen extends Component {
             color3: target.value
         })
         this.state.selectedItem.style.color = target.value;
+    }
     }
 
     close(e){
@@ -105,7 +114,7 @@ class EditScreen extends Component {
     }
     createContainer(e){
         e.preventDefault();
-        var item = <Draggable><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{borderWidth: '1px', fontSize: '12pt', borderColor: 'black', textColor: this.state.color3, borderStyle: 'solid', position: 'relative', top:'0px', height: '70px', width: '100px', left: '-5px', borderRadius: '5px'}}></div></Draggable>;
+        var item = <Draggable><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{borderWidth: '1px', fontSize: '12pt', borderColor: 'black', color: 'black',  borderStyle: 'solid', position: 'relative', top:'0px', height: '70px', width: '100px', left: '-5px', borderRadius: '5px'}}></div></Draggable>;
         this.state.items[this.state.totalCount] = item;
         var div = React.createElement('div', {}, this.state.items)
         var count = this.state.count1 + 1;
@@ -118,7 +127,7 @@ class EditScreen extends Component {
 
     createLabel(e){
         e.preventDefault();
-        var item = <Draggable><div id = {"label" + this.state.count2} onClick = {this.select.bind(this)} style={{position: 'relative', height: '50px', width: '200px', left: '-10px', top: '-0px'}}>Prompt for input:</div></Draggable>;
+        var item = <Draggable><div id = {"label" + this.state.count2} onClick = {this.select.bind(this)} style={{position: 'relative', height: '50px', width: '200px', color: 'black', left: '-10px', top: '-0px'}}>Prompt for input:</div></Draggable>;
         this.state.items[this.state.totalCount] = item;
         var div = React.createElement('div', {}, this.state.items)
         var count = this.state.count2 + 1;
@@ -143,7 +152,7 @@ class EditScreen extends Component {
     }
     createTextfield(e){
         e.preventDefault();
-        var item = <Draggable><div id = {"input" + this.state.count4} onClick = {this.select.bind(this)} style={{ borderWidth: '1px', borderStyle: 'solid', borderColor: 'black', color: 'lightgrey', position: 'relative', height: '25px', width: '180px', left: '-10px', top: '0px', borderRadius: '5px'}}>Input</div></Draggable>;
+        var item = <Draggable defaultPosition={{x: this.state.x, y: this.state.y}} position={{x: '100px', y: '200px'}}><div id = {"input" + this.state.count4} onClick = {this.select.bind(this)} style={{ borderWidth: '1px', borderStyle: 'solid', borderColor: 'black', color: 'lightgrey', position: 'relative', height: '25px', width: '180px', left: '-10px', top: '0px', borderRadius: '5px'}}>Input</div></Draggable>;
         this.state.items[this.state.totalCount] = item;
         var div = React.createElement('div', {}, this.state.items)
         var count = this.state.count3 + 1;
@@ -155,6 +164,7 @@ class EditScreen extends Component {
     }
     changeFontSize(e){
         e.preventDefault();
+        if(this.state.selectedItem){
         const { target } = e;
         this.setState(state => ({
             ...state,
@@ -165,8 +175,10 @@ class EditScreen extends Component {
         })
         this.state.selectedItem.style.fontSize = target.value+'px';
     }
+    }
     changeRadius(e){
         e.preventDefault();
+        if(this.state.selectedItem){
         const { target } = e;
         this.setState(state => ({
             ...state,
@@ -177,17 +189,62 @@ class EditScreen extends Component {
         })
         this.state.selectedItem.style.borderRadius = target.value+'px';
     }
-    changeThickness(e){
+    }
+    changeX(e){
         e.preventDefault();
+        if(this.state.selectedItem){
         const { target } = e;
         this.setState(state => ({
             ...state,
             [target.id]: target.value,
         }));
         this.setState({
-            thickness: target.value
+            x: target.value
         })
-        this.state.selectedItem.style.borderWidth = target.value+'px';
+        this.state.selectedItem.style.left = target.value+'px';
+    }
+    }
+    changeY(e){
+        e.preventDefault();
+        if(this.state.selectedItem){
+        const { target } = e;
+        this.setState(state => ({
+            ...state,
+            [target.id]: target.value,
+        }));
+        this.setState({
+            y: target.value
+        })
+        this.state.selectedItem.style.top = target.value+'px';
+    }
+    }
+    changeThickness(e){
+        e.preventDefault();
+        if(this.state.selectedItem){
+            const { target } = e;
+            this.setState(state => ({
+                ...state,
+                [target.id]: target.value,
+            }));
+            this.setState({
+                thickness: target.value
+            })
+            this.state.selectedItem.style.borderWidth = target.value+'px';
+        }
+    }
+    changeText(e){
+        e.preventDefault();
+        if(this.state.selectedItem){
+            const { target } = e;
+            this.setState(state => ({
+                ...state,
+                [target.id]: target.value,
+            }));
+            this.setState({
+                type: target.value
+            })
+            this.state.selectedItem.innerHTML = target.value;
+        }
     }
     select(e){
         e.preventDefault();
@@ -293,7 +350,7 @@ class EditScreen extends Component {
                     <div className="col s5 m4" style={{borderStyle: 'solid', borderWidth: '3px', height:'600px'}}>
                         Properties
                         <div>
-                            <input type="text" style={{height: '30px', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value= {this.state.type}/>
+                            <input type="text" onChange={this.changeText.bind(this)} style={{height: '30px', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value= {this.state.type}/>
                         </div>
                         <span>
                             <div className="font_size" style={{display: 'margin-right:10px'}}>
@@ -340,13 +397,13 @@ class EditScreen extends Component {
                     <span>
                         <div className="position_X" style={{display: 'margin-right:10px'}}>
                             PositionX:
-                            <input type="number" name="quantity" style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value ={this.state.x} min="0" step="1"/>
+                            <input type="number" name="quantity" onChange = {this.changeX.bind(this)}style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value ={this.state.x} min="0" step="1"/>
                         </div>
                     </span>
                     <span>
                         <div className="position_Y" style={{display: 'margin-right:10px'}}>
                             PositionY:
-                            <input type="number" name="quantity" style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value ={this.state.y} min="0" step="1"/>
+                            <input type="number" name="quantity" onChange = {this.changeY.bind(this)} style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value ={this.state.y} min="0" step="1"/>
                         </div>
                     </span>
                 </div>
