@@ -23,7 +23,6 @@ class EditScreen extends Component {
         selectedItem: null,
         type: '',
         font_size: 0,
-        border_thickness: 0,
         border_radius: 0,
         color1: 'black',
         color2: 'black',
@@ -62,6 +61,7 @@ class EditScreen extends Component {
         this.setState({
             color1: target.value
         })
+        this.state.selectedItem.style.backgroundColor = target.value;
     }
     changeColor1(e){
         const { target } = e;
@@ -72,6 +72,7 @@ class EditScreen extends Component {
         this.setState({
             color2: target.value
         })
+        this.state.selectedItem.style.borderColor = target.value;
     }
 
     changeColor2(e){
@@ -83,6 +84,7 @@ class EditScreen extends Component {
         this.setState({
             color3: target.value
         })
+        this.state.selectedItem.style.color = target.value;
     }
 
     close(e){
@@ -103,7 +105,7 @@ class EditScreen extends Component {
     }
     createContainer(e){
         e.preventDefault();
-        var item = <Draggable><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{borderWidth: '1px', fontSize: '12pt', borderColor: 'black', textColor: 'black', borderStyle: 'solid', position: 'relative', top:'0px', height: '70px', width: '100px', left: '-5px', borderRadius: '5px'}}></div></Draggable>;
+        var item = <Draggable><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{borderWidth: '1px', fontSize: '12pt', borderColor: 'black', textColor: this.state.color3, borderStyle: 'solid', position: 'relative', top:'0px', height: '70px', width: '100px', left: '-5px', borderRadius: '5px'}}></div></Draggable>;
         this.state.items[this.state.totalCount] = item;
         var div = React.createElement('div', {}, this.state.items)
         var count = this.state.count1 + 1;
@@ -129,7 +131,7 @@ class EditScreen extends Component {
 
     createButton(e){
         e.preventDefault();
-        var item = <Draggable><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{fontSize: '12pt',borderWidth: '1px', borderStyle: 'solid', textAlign: 'center', paddingTop: '1.5%', position: 'relative', top:'1px', height: '35px', backgroundColor: 'grey', width: '120px', left: '-10px', borderRadius: '5px'}}>Submit</div></Draggable>;
+        var item = <Draggable><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{fontSize: '12pt',borderWidth: '1px', borderColor:'black', borderStyle: 'solid', textAlign: 'center', position: 'relative', top:'1px', height: '35px', backgroundColor: 'grey', width: '120px', left: '-10px', color: 'black', borderRadius: '5px'}}>Submit</div></Draggable>;
         this.state.items[this.state.totalCount] = item;
         var div = React.createElement('div', {}, this.state.items)
         var count = this.state.count3 + 1;
@@ -151,9 +153,46 @@ class EditScreen extends Component {
         })
         ReactDOM.render(div, document.getElementById('full_container'))
     }
+    changeFontSize(e){
+        e.preventDefault();
+        const { target } = e;
+        this.setState(state => ({
+            ...state,
+            [target.id]: target.value,
+        }));
+        this.setState({
+            font_size: target.value
+        })
+        this.state.selectedItem.style.fontSize = target.value+'px';
+    }
+    changeRadius(e){
+        e.preventDefault();
+        const { target } = e;
+        this.setState(state => ({
+            ...state,
+            [target.id]: target.value,
+        }));
+        this.setState({
+            radius: target.value
+        })
+        this.state.selectedItem.style.borderRadius = target.value+'px';
+    }
+    changeThickness(e){
+        e.preventDefault();
+        const { target } = e;
+        this.setState(state => ({
+            ...state,
+            [target.id]: target.value,
+        }));
+        this.setState({
+            thickness: target.value
+        })
+        this.state.selectedItem.style.borderWidth = target.value+'px';
+    }
     select(e){
         e.preventDefault();
         this.state.selectedItem = e.target;
+        console.log(this.state.selectedItem);
         var item = this.state.selectedItem
         var fontSize  = item.style.fontSize;
         var width = item.style.borderWidth;
@@ -177,7 +216,7 @@ class EditScreen extends Component {
                 font_size: fontSize,
                 color1: item.style.backgroundColor,
                 color2: item.style.borderColor,
-                color3: item.style.textColor,
+                color3: item.style.color,
                 thickness: width,
                 radius: radius,
                 x: x,
@@ -259,7 +298,7 @@ class EditScreen extends Component {
                         <span>
                             <div className="font_size" style={{display: 'margin-right:10px'}}>
                                 Font Size:
-                                <input type="number" name="quantity" style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value={this.state.font_size} min="0" step="1"/>
+                                <input type="number" name="quantity" onChange={this.changeFontSize.bind(this)} style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value={this.state.font_size} min="0" step="1"/>
                             </div>
                         </span>
                     <span>
@@ -289,13 +328,13 @@ class EditScreen extends Component {
                     <span>
                         <div className="border_thickness_size" style={{display: 'margin-right:10px'}}>
                             Border Thickness:
-                            <input type="number" name="quantity" style={{height: '30px', position: 'relative', left: '5%', width:"20%", borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value={this.state.thickness} min="0" step="1"/>
+                            <input type="number" name="quantity" onChange={this.changeThickness.bind(this)} style={{height: '30px', position: 'relative', left: '5%', width:"20%", borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value={this.state.thickness} min="0" step="1"/>
                         </div>
                     </span>
                     <span>
                         <div className="border_radius_size" style={{display: 'margin-right:10px'}}>
                             Border Radius:
-                            <input type="number" name="quantity" style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value= {this.state.radius} min="0" step="1"/>
+                            <input type="number" name="quantity" onChange={this.changeRadius.bind(this)} style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value= {this.state.radius} min="0" step="1"/>
                         </div>
                     </span>
                     <span>
