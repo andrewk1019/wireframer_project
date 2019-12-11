@@ -39,7 +39,6 @@ div.banner {
   top: 2%;
   height: 32px;
   width: 32px;
-
   text-align: center;
 }
 .zoom_out{
@@ -55,6 +54,15 @@ div.banner {
   visibility: hidden;
 }
 #container:hover{
+  cursor: pointer;
+}
+#label:hover{
+  cursor: pointer;
+}
+#submit:hover{
+  cursor: pointer;
+}
+#textfield:hover{
   cursor: pointer;
 }
 .container1{

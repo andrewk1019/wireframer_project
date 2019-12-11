@@ -129,7 +129,7 @@ class EditScreen extends Component {
 
     createButton(e){
         e.preventDefault();
-        var item = <Draggable><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{borderWidth: '1px', borderStyle: 'solid', textAlign: 'center', paddingTop: '1.5%', position: 'relative', top:'1px', height: '35px', backgroundColor: 'grey', width: '120px', left: '-10px', borderRadius: '5px'}}>Submit</div></Draggable>;
+        var item = <Draggable><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{fontSize: '12pt',borderWidth: '1px', borderStyle: 'solid', textAlign: 'center', paddingTop: '1.5%', position: 'relative', top:'1px', height: '35px', backgroundColor: 'grey', width: '120px', left: '-10px', borderRadius: '5px'}}>Submit</div></Draggable>;
         this.state.items[this.state.totalCount] = item;
         var div = React.createElement('div', {}, this.state.items)
         var count = this.state.count3 + 1;
@@ -173,7 +173,7 @@ class EditScreen extends Component {
         
         if(this.state.selectedItem){
             this.setState({
-                type: "Container",
+                type: e.target.innerHTML,
                 font_size: fontSize,
                 color1: item.style.backgroundColor,
                 color2: item.style.borderColor,
