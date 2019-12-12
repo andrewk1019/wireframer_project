@@ -10,13 +10,15 @@
                     "fontSize": 14,
                     "backgroundColor": "#EEEEDD",
                     "borderColor": "#800000",
-                    "thickness": 2,
+                    "thickness": 5,
                     "text": "CSE 316",
                     "radius": 3,
-                    "width": 250,
-                    "height": 230,
+                    "width": 50,
+                    "height": 50,
                     "positionX": 30,
-                    "positionY": 60
+                    "positionY": 60,
+                    "borderStyle": "solid",
+                    "text-align": "center"
 
                 },
                 {
@@ -24,13 +26,15 @@
                     "fontSize": 12,
                     "backgroundColor": "FFFF00",
                     "borderColor": "#E6E6E6",
-                    "text": "",
+                    "text": "Type",
                     "thickness": 2,
                     "radius": 3,
-                    "width": 250,
-                    "height": 300,
+                    "width": 20,
+                    "height": 40,
                     "positionX": 20,
-                    "positionY": 40
+                    "positionY": 40,
+                    "borderStyle": "solid",
+                    "text-align": "center"
                 },
                 {
                     "type": "Button",
@@ -40,10 +44,12 @@
                     "text": "Submit",
                     "thickness": 3,
                     "radius": 1,
-                    "width": 130,
-                    "height": 100,
+                    "width": 50,
+                    "height": 50,
                     "positionX": 60,
-                    "positionY": 30
+                    "positionY": 30,
+                    "borderStyle": "solid",
+                    "text-align": "center"
                 }
             ]
         },
@@ -63,7 +69,9 @@
                     "width": 220,
                     "height": 230,
                     "positionX": 30,
-                    "positionY": 60
+                    "positionY": 60,
+                    "borderStyle": "solid",
+                    "text-align": "center"
 
                 },
                 {
@@ -77,7 +85,9 @@
                     "width": 120,
                     "height": 220,
                     "positionX": 70,
-                    "positionY": 40
+                    "positionY": 40,
+                    "borderStyle": "solid",
+                    "text-align": "center"
                 },
                 {
                     "type": "Textfield",
@@ -90,7 +100,9 @@
                     "width": 140,
                     "height": 150,
                     "positionX": 80,
-                    "positionY": 20
+                    "positionY": 20,
+                    "borderStyle": "solid",
+                    "text-align": "center"
                 }
             ]
         },
@@ -110,7 +122,9 @@
                     "width": 150,
                     "height": 250,
                     "positionX": 30,
-                    "positionY": 60
+                    "positionY": 60,
+                    "borderStyle": "solid",
+                    "text-align": "center"
 
                 },
                 {
@@ -119,12 +133,14 @@
                     "backgroundColor": "FFA500",
                     "borderColor": "FFFF00",
                     "text": "Midterm 2",
-                    "thickness": 2,
+                    "thickness": 5,
                     "radius": 1,
                     "width": 130,
                     "height": 140,
                     "positionX": 70,
-                    "positionY": 40
+                    "positionY": 40,
+                    "borderStyle": "solid",
+                    "text-align": "center"
                 },
                 {
                     "type": "Textfield",
@@ -137,7 +153,9 @@
                     "width": 150,
                     "height": 150,
                     "positionX": 80,
-                    "positionY": 20
+                    "positionY": 20,
+                    "borderStyle": "solid",
+                    "text-align": "center"
                 }
             ]
         }

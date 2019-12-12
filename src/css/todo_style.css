@@ -53,6 +53,17 @@ div.banner {
 .color_scheme{
   visibility: hidden;
 }
+#textfield_sample{
+    border-width: '1px';
+    border-style: 'solid';
+    border-color: 'black'; 
+    color: 'lightgrey'; 
+    position: 'relative'; 
+    height: '25px';
+    width: '180px'; 
+    left: '5%'; 
+    border-radius: '5px';
+}
 #container:hover{
   cursor: pointer;
 }
