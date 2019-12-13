@@ -207,20 +207,22 @@ class EditScreen extends Component {
     }
     handleDrag = (e, pos)=>{
         e.preventDefault();
-        if(!this.state.selectedItem){
+        if(this.state.selectedItem){
             this.state.selectedItem = e.target;
-        }
-        this.setState({
-            x: pos.lastX - (pos.x/2),
-            y: pos.lastY - (pos.y/2)})
-            var index = null;
-            for(var i = 0; i < this.state.items.length; i++){
-                if(this.state.items[i].id == this.state.selectedItem.id){
-                    index = i;
+            this.setState({
+                x: pos.lastX - (pos.x/2),
+                y: pos.lastY - (pos.y/2)})
+                var index = null;
+                for(var i = 0; i < this.state.items.length; i++){
+                    if(this.state.items[i].id == this.state.selectedItem.id){
+                        index = i;
+                    }
+                }
+                if(index != null){
+                    this.state.items[index].positionX =this.state.x;
+                    this.state.items[index].positionY = this.state.y;
                 }
             }
-            this.state.items[index].positionX = pos.lastX - (pos.x/2);
-            this.state.items[index].positionY = pos.lastY - (pos.y/2);
     }
     
 
@@ -240,8 +242,10 @@ class EditScreen extends Component {
                     index = i;
                 }
             }
-            this.state.items[index].width = ref.style.width;
-            this.state.items[index].height = ref.style.height;
+            if(index != null){
+                this.state.items[index].width = ref.style.width;
+                this.state.items[index].height = ref.style.height;
+            }
 
       }
     createTextfield(e){
@@ -263,7 +267,7 @@ class EditScreen extends Component {
                                         positionY: 0,
                                         borderStyle: 'solid',
                                         textAlign: 'left',
-                                        id: "textfield" + this.state.this.state.totalCount++
+                                        id: "textfield" + this.state.totalCount++
                                      };
         this.setState({
             render: false
@@ -402,10 +406,6 @@ class EditScreen extends Component {
             ...state,
             [target.id]: target.value,
         }));
-        this.setState({
-            width: target.value
-        })
-        this.state.selectedItem.style.width = target.value;
         var index = null;
         for(var i = 0; i < this.state.items.length; i++){
             if(this.state.items[i].id == this.state.selectedItem.id){
@@ -413,6 +413,10 @@ class EditScreen extends Component {
             }
         }
         this.state.items[index].width = target.value;
+        this.setState({
+            width: target.value
+        })
+        this.state.selectedItem.style.width = target.value;
     }
     }
     changeHeight(e){
@@ -423,10 +427,6 @@ class EditScreen extends Component {
             ...state,
             [target.id]: target.value,
         }));
-        this.setState({
-            height: target.value
-        })
-        this.state.selectedItem.style.height = target.value;
         var index = null;
         for(var i = 0; i < this.state.items.length; i++){
             if(this.state.items[i].id == this.state.selectedItem.id){
@@ -434,10 +434,15 @@ class EditScreen extends Component {
             }
         }
         this.state.items[index].height = target.value;
+        this.setState({
+            height: target.value
+        })
+        this.state.selectedItem.style.height = target.value;
     }
     }
     select(e){
         e.preventDefault();
+        console.log(e.target)
         this.state.selectedItem = e.target;
         var item = this.state.selectedItem
         var fontSize  = item.style.fontSize;
@@ -449,7 +454,12 @@ class EditScreen extends Component {
         width = parseInt(width);
         fontSize = fontSize.substring(0, fontSize.length - 2)
         fontSize = parseInt(fontSize)
-        
+        var width1 = parseInt(item.style.width.substring(0,  item.style.width.length - 2))
+        var height1 = parseInt(item.style.height.substring(0,  item.style.height.length - 2))
+        var position = item.parentNode.style.transform
+        var index = position.indexOf(',')
+        var x = parseInt(position.substring(10, index))
+        var y = parseInt(position.substring(index + 2,))
         if(this.state.selectedItem){
             this.setState({
                 type: e.target.innerHTML,
@@ -461,8 +471,8 @@ class EditScreen extends Component {
                 radius: radius,
                 X: this.state.x,
                 Y: this.state.y,
-                width: this.state.width,
-                height: this.state.height,
+                width: width1,
+                height: height1,
             })
         }
     }
@@ -474,7 +484,7 @@ class EditScreen extends Component {
             return <Redirect to="/" />;
         }
         return (
-            <div className="container white body" style={{borderStyle: 'solid', height:'758px', borderRadius: '10px', borderWidth: '3px'}}>
+            <div className="container0 white body" style={{borderStyle: 'solid', height:'758px', borderRadius: '10px', borderWidth: '3px'}}>
                 <div className="input-field">
                     <label htmlFor="email" className="active">Name</label>
                     <input className="active" type="text" name="name" id="name" value={this.state.name} onChange={this.handleChange.bind(this)}/>
@@ -499,39 +509,39 @@ class EditScreen extends Component {
                             Close
                         </div>
                         </span>
-                        <div id = "container" onClick={this.createContainer.bind(this)} style={{borderWidth: '1px', borderStyle: 'solid', position: 'relative', top:'-10%', height: '70px', width: '100px', left: '25%', borderRadius: '5px'}}>
+                        <div id = "container" onClick={this.createContainer.bind(this)} style={{borderWidth: '1px', borderStyle: 'solid', position: 'relative', top:'-10%', height: '70px', width: '100px', left: '30%', borderRadius: '5px'}}>
                         </div>
-                        <div id = "container_name"style={{ position: 'relative', top:'-10%', left: '26%'}}>
+                        <div id = "container_name"style={{ position: 'relative', top:'-10%', left: '31%'}}>
                             <b>Container</b>
                         </div>
-                        <div id = "label" onClick={this.createLabel.bind(this)} style={{position: 'relative', height: '50px', width: '200px', left: '10%', top: '-5%'}}>
+                        <div id = "label" onClick={this.createLabel.bind(this)} style={{position: 'relative', height: '50px', width: '200px', left: '20%', top: '0%'}}>
                             Prompt for input:
                         </div>
-                        <div id = "label_name"style={{ position: 'relative', top:'-10%', left: '40%'}}>
+                        <div id = "label_name"style={{ position: 'relative', top:'-5%', left: '41%'}}>
                             <b>Label</b>
                         </div>
-                        <div id = "submit" onClick = {this.createButton.bind(this)}style={{borderWidth: '1px', borderStyle: 'solid', textAlign: 'center', position: 'relative', top:'-5%', height: '35px', backgroundColor: 'grey', width: '120px', left: '20%', borderRadius: '5px'}}>
+                        <div id = "submit" onClick = {this.createButton.bind(this)}style={{borderWidth: '1px', borderStyle: 'solid', textAlign: 'center', position: 'relative', top:'5%', height: '35px', backgroundColor: 'grey', width: '120px', left: '25%', borderRadius: '5px'}}>
                             Submit
                         </div>
-                        <div id = "label_name"style={{ position: 'relative', top: '-5%', left: '35%'}}>
+                        <div id = "label_name"style={{ position: 'relative', top: '5%', left: '35%'}}>
                             <b>Button</b>
                         </div>
-                        <div id = "textfield" onClick = {this.createTextfield.bind(this)} style={{borderWidth: '1px', borderStyle: 'solid', borderColor: 'black', color: 'lightgrey', position: 'relative', height: '25px', width: '180px', left: '5%', borderRadius: '5px'}}>
+                        <div id = "textfield" onClick = {this.createTextfield.bind(this)} style={{top: '15%', borderWidth: '1px', borderStyle: 'solid', borderColor: 'black', color: 'lightgrey', position: 'relative', height: '25px', width: '180px', left: '15%', borderRadius: '5px'}}>
                             Input
                         </div>
-                        <div id = "textfield_name"style={{ position: 'relative', left: '30%'}}>
+                        <div id = "textfield_name"style={{ position: 'relative', left: '30%', top: '15%'}}>
                             <b>Textfield</b>
                         </div>
                     </div>
-                    <div className="second_column col s10 m5" style={{borderStyle: 'solid', borderWidth: '3px', height:'600px'}}>
-                        <div className = "old_container" id = "old_container">
+                    <div className="second_column col s10 m6" style={{left: '-100px', height:'600px'}}>
+                        <div className = "old_container" id = "old_container" style={{borderStyle: 'solid',borderWidth: '3px', height:'600px'}}>
                         {this.state.items && this.state.items.map(function(item) {
-                                return <Rnd default ={{x: item.positionX, y: item.positionY}} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness, fontSize: item.fontSize, backgroundColor: 
-                                item.backgroundColor, borderColor: item.borderColor, width: item.width, height: item.height,  color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle:"solid", }}>{item.text}</div></Rnd>
+                                return <Rnd bounds={'parent'} default ={{x: item.positionX, y: item.positionY}} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness, fontSize: item.fontSize, backgroundColor: 
+                                item.backgroundColor, borderColor: item.borderColor, width: item.width, height: item.height, color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle:"solid", }}>{item.text}</div></Rnd>
                              }, this)}
                         </div>
                     </div>
-                    <div className="col s5 m4" style={{borderStyle: 'solid', borderWidth: '3px', height:'600px'}}>
+                    <div className="col s5 m3" style={{borderStyle: 'solid', borderWidth: '3px', height:'600px'}}>
                         Properties
                         <div>
                             <input type="text" onChange={this.changeText.bind(this)} style={{height: '30px', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} value= {this.state.type}/>

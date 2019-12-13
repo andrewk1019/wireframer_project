@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 class LoggedOutLinks extends React.Component {
   render() {
     return (
-      <ul className = "right" >
+      <ul className = "right" style={{left: '100%'}}>
         <li><NavLink to="/register">Register</NavLink></li>
       </ul>
     );

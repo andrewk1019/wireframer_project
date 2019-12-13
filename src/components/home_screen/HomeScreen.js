@@ -15,16 +15,16 @@ class HomeScreen extends Component {
             return <Redirect to="/login" />;
         }
         return (
-            <div className="dashboard container">
+            <div className="dashboard container1">
                 <div className="row">
-                    <div className="col s14 m4">
+                    <div className="col s14 m5">
                         <div className = "recentWorks">
                             <b>Recent Work</b>
                         <TodoListLinks />
                         </div>
                     </div>
 
-                    <div className="col s8">
+                    <div className="col s6">
                         <div className="banner">
                             Wireframer<sup>TM</sup>
                         </div>

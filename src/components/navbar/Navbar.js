@@ -14,9 +14,9 @@ class Navbar extends React.Component {
     const links = auth.uid ? <LoggedInLinks profile={profile} /> : <LoggedOutLinks />;
 
     return (
-      <nav className="nav-wrapper" style={{backgroundColor:"#6A7687"}}>
-        <div className="container">
-          <Link to="/" className="brand-logo" style={{fontSize: '20pt'}} >Wireframer!</Link>
+      <nav className="nav-wrapper" style={{backgroundColor:"#6A7687", width: '100%'}}>
+        <div className="container1">
+          <Link to="/" className="brand-logo" style={{fontSize: '20pt', left: '2%'}} >Wireframer!</Link>
           {links}
         </div>
       </nav>
