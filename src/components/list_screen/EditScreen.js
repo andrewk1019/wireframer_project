@@ -35,11 +35,7 @@ class EditScreen extends Component {
         y: 0,
         width: 0,
         height: 0,
-        count1: 0,
-        count2: 0,
-        count3: 0,
-        count4: 0,
-        totalCount: 0,
+        totalCount: this.props.wireframe.items.length,
         originalItem: null,
         render: false
 
@@ -134,49 +130,86 @@ class EditScreen extends Component {
     
     createContainer(e){
         e.preventDefault();
-        var item = <Rnd key = {this.state.randomKey}><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{borderWidth: '1px', fontSize: '12pt', borderColor: 'black', color: 'black',  borderStyle: 'solid', position: 'relative', top:'0px', height: '70px', width: '100px', left: '-5px', borderRadius: '5px'}}></div></Rnd>;
-        this.state.items[this.state.totalCount] = item;
-        var div = React.createElement('div', {}, this.state.items)
-        var count = this.state.count1 + 1;
-        this.state.totalCount = this.state.totalCount + 1;
         this.setState({
-            count1: count
+            render: true
         })
-        
-        var val = ReactDOM.render(div, document.getElementById('full_container'))
+        this.state.items[this.state.items.length] = {type: 'Label', 
+                                        fontSize: 16,
+                                        backgroundColor: 'white', 
+                                        textColor: 'black',
+                                        borderColor:'white', 
+                                        thickness: '1px', 
+                                        text: 'Prompt for input:',
+                                        radius: '1px',
+                                        width: 200,
+                                        height: 25,
+                                        positionX: 0,
+                                        positionY: 0,
+                                        borderStyle: 'solid',
+                                        textAlign: 'center',
+                                        id: "label" + this.state.totalCount++
+                                     };
+        this.setState({
+            render: false
+        })
     }
 
     createLabel(e){
         e.preventDefault();
-        var item = <Rnd><div id = {"label" + this.state.count2} onClick = {this.select.bind(this)} style={{position: 'relative', height: '50px', width: '200px', color: 'black', left: '-10px', top: '-0px'}}>Prompt for input:</div></Rnd>;
-        this.state.items[this.state.totalCount] = item;
-        var div = React.createElement('div', {}, this.state.items)
-        var count = this.state.count2 + 1;
-        this.state.totalCount = this.state.totalCount + 1;
         this.setState({
-            count2: count
+            render: true
         })
-        ReactDOM.render(div, document.getElementById('full_container'))
+        this.state.items[this.state.items.length] = {type: 'Label', 
+                                        fontSize: 16,
+                                        backgroundColor: 'white', 
+                                        textColor: 'black',
+                                        borderColor:'white', 
+                                        thickness: '1px', 
+                                        text: 'Prompt for input:',
+                                        radius: '1px',
+                                        width: 200,
+                                        height: 25,
+                                        positionX: 0,
+                                        positionY: 0,
+                                        borderStyle: 'solid',
+                                        textAlign: 'center',
+                                        id: "label" + this.state.totalCount++
+                                     };
+        this.setState({
+            render: false
+        })
     }
 
     createButton(e){
         e.preventDefault();
-        var item = <Rnd onDragStop={this.handleDrag.bind(this)}><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{fontSize: '12pt',borderWidth: '1px', borderColor:'black', borderStyle: 'solid', textAlign: 'center', position: 'relative', top:'1px', height: '35px', backgroundColor: 'grey', width: '120px', left: '-10px', color: 'black', borderRadius: '5px'}}>Submit</div></Rnd>;
-        this.state.items[this.state.totalCount] = item;
-        var div = React.createElement('div', {}, this.state.items)
-        var count = this.state.count3 + 1;
-        this.state.totalCount = this.state.totalCount + 1;
         this.setState({
-            count3: count
+            render: true
         })
-        ReactDOM.render(div, document.getElementById('full_container'))
+        this.state.items[this.state.items.length] = {type: 'Button', 
+                                        fontSize: 14,
+                                        backgroundColor: 'grey', 
+                                        textColor: 'black',
+                                        borderColor:'black', 
+                                        thickness: '1px', 
+                                        text: 'Submit',
+                                        radius: '5px',
+                                        width: 125,
+                                        height: 35,
+                                        positionX: 0,
+                                        positionY: 0,
+                                        borderStyle: 'solid',
+                                        textAlign: 'center',
+                                        id: "button" + this.state.totalCount++
+                                     };
+        this.setState({
+            render: false
+        })
     }
     handleDrag = (e, pos)=>{
         e.preventDefault();
         if(!this.state.selectedItem){
             this.state.selectedItem = e.target;
         }
-        console.log(pos)
         this.setState({
             x: pos.lastX - (pos.x/2),
             y: pos.lastY - (pos.y/2)})
@@ -230,7 +263,7 @@ class EditScreen extends Component {
                                         positionY: 0,
                                         borderStyle: 'solid',
                                         textAlign: 'left',
-                                        id: "textfield" + this.state.count4++
+                                        id: "textfield" + this.state.this.state.totalCount++
                                      };
         this.setState({
             render: false
@@ -428,8 +461,8 @@ class EditScreen extends Component {
                 radius: radius,
                 X: this.state.x,
                 Y: this.state.y,
-                width: parseInt(e.target.parentElement.style.width.substring(0 ,e.target.parentElement.style.width.length - 2)),
-                height: parseInt(e.target.parentElement.style.height.substring(0 ,e.target.parentElement.style.height.length - 2))
+                width: this.state.width,
+                height: this.state.height,
             })
         }
     }
@@ -477,7 +510,7 @@ class EditScreen extends Component {
                         <div id = "label_name"style={{ position: 'relative', top:'-10%', left: '40%'}}>
                             <b>Label</b>
                         </div>
-                        <div id = "submit" onClick = {this.createButton.bind(this)}style={{value: "Submit",borderWidth: '1px', borderStyle: 'solid', textAlign: 'center', paddingTop: '2.5%', position: 'relative', top:'-5%', height: '35px', backgroundColor: 'grey', width: '120px', left: '20%', borderRadius: '5px'}}>
+                        <div id = "submit" onClick = {this.createButton.bind(this)}style={{borderWidth: '1px', borderStyle: 'solid', textAlign: 'center', position: 'relative', top:'-5%', height: '35px', backgroundColor: 'grey', width: '120px', left: '20%', borderRadius: '5px'}}>
                             Submit
                         </div>
                         <div id = "label_name"style={{ position: 'relative', top: '-5%', left: '35%'}}>

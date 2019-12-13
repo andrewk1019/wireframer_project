@@ -58,7 +58,6 @@ class DatabaseTester extends React.Component {
     render() {
         if(this.props.auth.uid){
             var owner = this.props.auth.email;
-            var state = this.state.admin;
             getFirestore().collection('users').get().then((querySnapshot) =>{
                 querySnapshot.forEach((doc) => {
                     if(doc.data().owner == owner){
@@ -70,7 +69,6 @@ class DatabaseTester extends React.Component {
                     }
                 })
               });
-            console.log(this.state.admin)
             if(!this.state.admin){
                 return <Redirect to="/" />;
             }
