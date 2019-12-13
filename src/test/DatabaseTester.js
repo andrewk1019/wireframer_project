@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import todoJson from './TestWireframeData.json'
+import { NavLink, Redirect } from 'react-router-dom';
 import { getFirestore } from 'redux-firestore';
 
 class DatabaseTester extends React.Component {
@@ -24,8 +25,7 @@ class DatabaseTester extends React.Component {
         todoJson.wireframes.forEach(todoListJson => {
             fireStore.collection('wireframes').add({
                     name: todoListJson.name,
-                    owner: "",
-                    admin: todoListJson.admin,
+                    owner: this.props.auth.email,
                     items: todoListJson.controls,
                     pos: count++,
                 }).then(() => {
@@ -37,6 +37,19 @@ class DatabaseTester extends React.Component {
     }
 
     render() {
+        if(this.props.auth.uid){
+            var owner = this.props.auth.email;
+            getFirestore().collection('users').get().then(function(querySnapshot){
+                querySnapshot.forEach(function(doc) {
+                    if(doc.data().owner == owner){
+                        if(!doc.data().admin){
+                            return <Redirect to="/"/>
+                        }
+                    }
+                })
+              });
+        }
+
         return (
             <div>
                 <button onClick={this.handleClear}>Clear Database</button>
@@ -48,6 +61,7 @@ class DatabaseTester extends React.Component {
 const mapStateToProps = function (state) {
     return {
         auth: state.firebase.auth,
+        profile: state.firebase.profile,
         firebase: state.firebase
     };
 }

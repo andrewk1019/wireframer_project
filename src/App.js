@@ -28,7 +28,6 @@ class App extends Component {
               <Route path="/databaseTester" component={DatabaseTester} />
               <Route path="/register" component={RegisterScreen} />
               <Route path="/login" component={LoginScreen} />
-              <Route path="/wireframe/:id/items/:key" component={ItemScreen} />
               <Route path="/wireframe/:id" component={ListScreen} />
               <Route path="/:any" component={HomeScreen} />
             </Switch>

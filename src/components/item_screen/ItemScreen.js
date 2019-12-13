@@ -43,7 +43,6 @@ class ItemScreen extends Component {
   }
 
   onChangeCompleted = (event) =>{
-    console.log(event.target.checked, 'ded');
       this.setState({
           completed: event.target.checked
       })

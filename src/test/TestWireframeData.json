@@ -2,44 +2,48 @@
     "wireframes": [
         {
             "name": "CSE 316 Home Page",
-            "owner": "rtk@gmail.com",
-            "admin": false,
             "controls": [
                 {
                     "type": "Container",
                     "fontSize": 14,
                     "backgroundColor": "#EEEEDD",
+                    "textColor": "black",
                     "borderColor": "#800000",
                     "thickness": 5,
                     "text": "CSE 316",
                     "radius": 3,
-                    "width": 50,
-                    "height": 50,
+                    "width": 180,
+                    "height": 40,
                     "positionX": 30,
                     "positionY": 60,
                     "borderStyle": "solid",
-                    "text-align": "center"
+                    "textAlign": "center",
+                    "id": "container-1"
+                    
 
                 },
                 {
                     "type": "Label",
                     "fontSize": 12,
                     "backgroundColor": "FFFF00",
+                    "textColor": "black",
                     "borderColor": "#E6E6E6",
                     "text": "Type",
                     "thickness": 2,
                     "radius": 3,
-                    "width": 20,
-                    "height": 40,
+                    "width": 900,
+                    "height": 400,
                     "positionX": 20,
                     "positionY": 40,
                     "borderStyle": "solid",
-                    "text-align": "center"
+                    "textAlign": "center",
+                    "id": "label-1"
                 },
                 {
                     "type": "Button",
                     "fontSize": 18,
                     "backgroundColor": "#111111",
+                    "textColor": "black",
                     "borderColor": "#800000",
                     "text": "Submit",
                     "thickness": 3,
@@ -49,19 +53,19 @@
                     "positionX": 60,
                     "positionY": 30,
                     "borderStyle": "solid",
-                    "text-align": "center"
+                    "textAlign": "center",
+                    "id": "button-1"
                 }
             ]
         },
         {
             "name": "CSE 220 Class Page",
-            "owner": "kevin@yahoo.com",
-            "admin": true,
             "controls": [
                 {
                     "type": "Input",
                     "fontSize": 14,
                     "backgroundColor": "#E6E6E6",
+                    "textColor": "black",
                     "borderColor": "#111111",
                     "text": "CSE 220",
                     "thickness": 2,
@@ -71,13 +75,15 @@
                     "positionX": 30,
                     "positionY": 60,
                     "borderStyle": "solid",
-                    "text-align": "center"
+                    "textAlign": "center",
+                    "id": "input-1"
 
                 },
                 {
                     "type": "Label",
                     "fontSize": 12,
                     "backgroundColor": "FFA500",
+                    "textColor": "black",
                     "borderColor": "#E6E6E6",
                     "text": "Test 1",
                     "thickness": 2,
@@ -87,12 +93,14 @@
                     "positionX": 70,
                     "positionY": 40,
                     "borderStyle": "solid",
-                    "text-align": "center"
+                    "textAlign": "center",
+                    "id": "label-1"
                 },
                 {
                     "type": "Textfield",
                     "fontSize": 18,
                     "backgroundColor": "FFA500",
+                    "textColor": "black",
                     "borderColor": "#800000",
                     "text": "HW# 2",
                     "thickness": 3,
@@ -102,19 +110,19 @@
                     "positionX": 80,
                     "positionY": 20,
                     "borderStyle": "solid",
-                    "text-align": "center"
+                    "textAlign": "center",
+                    "id": "textfield-1"
                 }
             ]
         },
         {
             "name": "AMS 310 Course Schedule",
-            "owner": "frispoli@verizon.net",
-            "admin": true,
             "controls": [
                 {
                     "type": "Container",
                     "fontSize": 12,
                     "backgroundColor": "#E1E4CB",
+                    "textColor": "black",
                     "borderColor": "FFFF00",
                     "text": "Midterm 1",
                     "thickness": 2,
@@ -124,13 +132,14 @@
                     "positionX": 30,
                     "positionY": 60,
                     "borderStyle": "solid",
-                    "text-align": "center"
+                    "textAlign": "center"
 
                 },
                 {
                     "type": "Label",
                     "fontSize": 12,
                     "backgroundColor": "FFA500",
+                    "textColor": "black",
                     "borderColor": "FFFF00",
                     "text": "Midterm 2",
                     "thickness": 5,
@@ -140,12 +149,13 @@
                     "positionX": 70,
                     "positionY": 40,
                     "borderStyle": "solid",
-                    "text-align": "center"
+                    "textAlign": "center"
                 },
                 {
                     "type": "Textfield",
                     "fontSize": 12,
                     "backgroundColor": "#E1E4CB",
+                    "textColor": "black",
                     "borderColor": "#669966",
                     "text": "Midterm 3",
                     "thickness": 3,
@@ -155,7 +165,7 @@
                     "positionX": 80,
                     "positionY": 20,
                     "borderStyle": "solid",
-                    "text-align": "center"
+                    "textAlign": "center"
                 }
             ]
         }

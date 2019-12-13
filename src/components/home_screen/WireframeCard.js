@@ -18,6 +18,10 @@ class WireframeCard extends React.Component {
     }
     render() {
         const { wireframe } = this.props;
+        if(wireframe.owner != this.props.auth.email){
+            return<div></div>;
+        }
+
         return (
             <div className="card z-depth-0 todo-list-link" style={{borderRadius: '10px', backgroundColor: 'transparent'}}>
                 <div className="card-content grey-text text-darken-3">
@@ -46,8 +50,6 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = dispatch => ({
-})
 export default compose(
-    connect(mapDispatchToProps),
+    connect(mapStateToProps),
   )(WireframeCard);

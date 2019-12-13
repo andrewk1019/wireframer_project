@@ -3,15 +3,14 @@ import ReactDOM from 'react-dom';
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import ItemsList from './ItemsList.js'
 import { firestoreConnect, reactReduxFirebase } from 'react-redux-firebase';
 import { updateRegister } from '../../store/database/asynchHandler';
 import {moveToTopRegister } from '../../store/database/asynchHandler';
 import {sortTaskRegister } from '../../store/database/asynchHandler';
 import {sortDueDateRegister } from '../../store/database/asynchHandler';
 import {sortCompletedRegister } from '../../store/database/asynchHandler';
-import Draggable from 'react-draggable'; // The default
 import {getFirestore} from 'redux-firestore';
+import {Rnd} from 'react-rnd'
 
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 import { isTSEnumMember } from '@babel/types';
@@ -34,12 +33,15 @@ class EditScreen extends Component {
         radius: 0,
         x: 0,
         y: 0,
+        width: 0,
+        height: 0,
         count1: 0,
         count2: 0,
         count3: 0,
         count4: 0,
         totalCount: 0,
         originalItem: null,
+        render: false
 
     }
 
@@ -68,6 +70,13 @@ class EditScreen extends Component {
             color1: target.value
         })
         this.state.selectedItem.style.backgroundColor = target.value;
+        var index = null;
+        for(var i = 0; i < this.state.items.length; i++){
+            if(this.state.items[i].id == this.state.selectedItem.id){
+                index = i;
+            }
+        }
+        this.state.items[index].backgroundColor = target.value;
     }
     }
     changeColor1(e){
@@ -82,6 +91,13 @@ class EditScreen extends Component {
             color2: target.value
         })
         this.state.selectedItem.style.borderColor = target.value;
+        var index = null;
+        for(var i = 0; i < this.state.items.length; i++){
+            if(this.state.items[i].id == this.state.selectedItem.id){
+                index = i;
+            }
+        }
+        this.state.items[index].borderColor = target.value;
     }
     }
 
@@ -97,32 +113,18 @@ class EditScreen extends Component {
             color3: target.value
         })
         this.state.selectedItem.style.color = target.value;
+        var index = null;
+        for(var i = 0; i < this.state.items.length; i++){
+            if(this.state.items[i].id == this.state.selectedItem.id){
+                index = i;
+            }
+        }
+        this.state.items[index].textColor = target.value;
     }
     }
     save(e){
         e.preventDefault();
         var firestore = getFirestore();
-        for(var i = 0; i < this.state.newItems.length; i++){
-            this.state.newFields[i] = {
-                'type': 'TextField',
-                'fontSize': parseInt(this.state.newFields[i].childNodes[0].style.fontSize.substring(0, this.state.newFields[i].childNodes[0].style.fontSize.length - 2)),
-                'backgroundColor': this.state.newFields[i].childNodes[0].style.backgroundColor,
-                'borderColor': this.state.newFields[i].childNodes[0].style.borderColor,
-                'thickness': this.state.newFields[i].childNodes[0].style.borderWidth,
-                'text': this.state.newFields[i].childNodes[0].innerHTML,
-                'radius': parseInt(this.state.newFields[i].childNodes[0].style.borderRadius.substring(0, this.state.newFields[i].childNodes[0].style.borderRadius.length - 2)),
-                'width': parseInt(this.state.newFields[i].childNodes[0].style.width.substring(0, this.state.newFields[i].childNodes[0].style.width.length - 2)),
-                'height': parseInt(this.state.newFields[i].childNodes[0].style.height.substring(0, this.state.newFields[i].childNodes[0].style.height.length - 2)),
-                'positionX': this.state.newFields[i].childNodes[0].X,
-                'positionY': this.state.newFields[i].childNodes[0].Y,
-                'borderStyle': 'solid',
-                'textAlign': 'center'
-            };
-        }
-        console.log(this.state.newFields)
-        console.log(this.state.items)
-        this.state.items = this.state.items.concat(this.state.newFields);
-        console.log(this.state.items)
         firestore.collection('wireframes').doc(this.props.wireframe.id).update({items:this.state.items});
     }
     close(e){
@@ -132,7 +134,7 @@ class EditScreen extends Component {
     
     createContainer(e){
         e.preventDefault();
-        var item = <Draggable key = {this.state.randomKey}><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{borderWidth: '1px', fontSize: '12pt', borderColor: 'black', color: 'black',  borderStyle: 'solid', position: 'relative', top:'0px', height: '70px', width: '100px', left: '-5px', borderRadius: '5px'}}></div></Draggable>;
+        var item = <Rnd key = {this.state.randomKey}><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{borderWidth: '1px', fontSize: '12pt', borderColor: 'black', color: 'black',  borderStyle: 'solid', position: 'relative', top:'0px', height: '70px', width: '100px', left: '-5px', borderRadius: '5px'}}></div></Rnd>;
         this.state.items[this.state.totalCount] = item;
         var div = React.createElement('div', {}, this.state.items)
         var count = this.state.count1 + 1;
@@ -146,7 +148,7 @@ class EditScreen extends Component {
 
     createLabel(e){
         e.preventDefault();
-        var item = <Draggable><div id = {"label" + this.state.count2} onClick = {this.select.bind(this)} style={{position: 'relative', height: '50px', width: '200px', color: 'black', left: '-10px', top: '-0px'}}>Prompt for input:</div></Draggable>;
+        var item = <Rnd><div id = {"label" + this.state.count2} onClick = {this.select.bind(this)} style={{position: 'relative', height: '50px', width: '200px', color: 'black', left: '-10px', top: '-0px'}}>Prompt for input:</div></Rnd>;
         this.state.items[this.state.totalCount] = item;
         var div = React.createElement('div', {}, this.state.items)
         var count = this.state.count2 + 1;
@@ -159,7 +161,7 @@ class EditScreen extends Component {
 
     createButton(e){
         e.preventDefault();
-        var item = <Draggable bounds= {{left: 0, top: 0, bottom: 560, right: 240}} onStop={this.handleDrag.bind(this)}><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{fontSize: '12pt',borderWidth: '1px', borderColor:'black', borderStyle: 'solid', textAlign: 'center', position: 'relative', top:'1px', height: '35px', backgroundColor: 'grey', width: '120px', left: '-10px', color: 'black', borderRadius: '5px'}}>Submit</div></Draggable>;
+        var item = <Rnd onDragStop={this.handleDrag.bind(this)}><div id = {"button" + this.state.count3} onClick = {this.select.bind(this)} style={{fontSize: '12pt',borderWidth: '1px', borderColor:'black', borderStyle: 'solid', textAlign: 'center', position: 'relative', top:'1px', height: '35px', backgroundColor: 'grey', width: '120px', left: '-10px', color: 'black', borderRadius: '5px'}}>Submit</div></Rnd>;
         this.state.items[this.state.totalCount] = item;
         var div = React.createElement('div', {}, this.state.items)
         var count = this.state.count3 + 1;
@@ -171,28 +173,68 @@ class EditScreen extends Component {
     }
     handleDrag = (e, pos)=>{
         e.preventDefault();
+        if(!this.state.selectedItem){
+            this.state.selectedItem = e.target;
+        }
+        console.log(pos)
         this.setState({
-            x: pos.x,
-            y: pos.y})
-        e.target.X = pos.x;
-        e.target.Y = pos.x;
+            x: pos.lastX - (pos.x/2),
+            y: pos.lastY - (pos.y/2)})
+            var index = null;
+            for(var i = 0; i < this.state.items.length; i++){
+                if(this.state.items[i].id == this.state.selectedItem.id){
+                    index = i;
+                }
+            }
+            this.state.items[index].positionX = pos.lastX - (pos.x/2);
+            this.state.items[index].positionY = pos.lastY - (pos.y/2);
     }
+    
+
+    handleResize = (e, direction, ref, delta, position) => {
+        e.preventDefault();
+        if(!this.state.selectedItem){
+            this.state.selectedItem = e.target;
+        }
+            this.setState({
+            width: parseInt(ref.style.width.substring(0, ref.style.width.length - 2)),
+            height: parseInt(ref.style.height.substring(0, ref.style.height.length - 2)),
+            ...position,
+            });
+            var index = null;
+            for(var i = 0; i < this.state.items.length; i++){
+                if(this.state.items[i].id == this.state.selectedItem.id){
+                    index = i;
+                }
+            }
+            this.state.items[index].width = ref.style.width;
+            this.state.items[index].height = ref.style.height;
+
+      }
     createTextfield(e){
         e.preventDefault();
-        var item = <Draggable position={0,0} bounds= {{left: 0, top: 0, bottom: 560, right: 240}} onStop = {this.handleDrag.bind(this)}><div id = {"textfield" + this.state.count3} onClick = {this.select.bind(this)} style={{fontSize: '12pt',borderWidth: '1px', borderColor:'black', borderStyle: 'solid', textAlign: 'center', position: 'relative', height: '35px', backgroundColor: 'grey', width: '120px', color: 'black', borderRadius: '5px'}}>Textfield</div></Draggable>;
-        this.state.newItems[this.state.totalCount] = item;
-        console.log(item)
-        var div = React.createElement('div', {}, this.state.newItems)
-        ReactDOM.render(div, document.getElementById('full_container'))
-        var count = this.state.count3 + 1;
-        this.state.totalCount = this.state.totalCount + 1;
         this.setState({
-            count4: count
+            render: true
         })
-        console.log(item.props)
-        var val = ReactDOM.render(div, document.getElementById('full_container'))
-        this.state.newFields[this.state.newFields.length] = val;
-        //firestore.collection('wireframes').doc(this.props.wireframe.id).update({items:this.state.items});
+        this.state.items[this.state.items.length] = {type: 'Container', 
+                                        fontSize: 14,
+                                        backgroundColor: 'white', 
+                                        textColor: 'lightgrey',
+                                        borderColor:'black', 
+                                        thickness: '1px', 
+                                        text: 'Input',
+                                        radius: '5px',
+                                        width: 180,
+                                        height: 25,
+                                        positionX: 0,
+                                        positionY: 0,
+                                        borderStyle: 'solid',
+                                        textAlign: 'left',
+                                        id: "textfield" + this.state.count4++
+                                     };
+        this.setState({
+            render: false
+        })
     }
     changeFontSize(e){
         e.preventDefault();
@@ -206,6 +248,13 @@ class EditScreen extends Component {
             font_size: target.value
         })
         this.state.selectedItem.style.fontSize = target.value+'px';
+        var index = null;
+        for(var i = 0; i < this.state.items.length; i++){
+            if(this.state.items[i].id == this.state.selectedItem.id){
+                index = i;
+            }
+        }
+        this.state.items[index].fontSize = target.value;
     }
     }
     changeRadius(e){
@@ -220,6 +269,13 @@ class EditScreen extends Component {
             radius: target.value
         })
         this.state.selectedItem.style.borderRadius = target.value+'px';
+        var index = null;
+        for(var i = 0; i < this.state.items.length; i++){
+            if(this.state.items[i].id == this.state.selectedItem.id){
+                index = i;
+            }
+        }
+        this.state.items[index].borderRadius = target.value;
     }
     }
     changeX(e){
@@ -233,6 +289,14 @@ class EditScreen extends Component {
         this.setState({
             x: target.value
         })
+        this.state.X = target.value;
+        var index = null;
+        for(var i = 0; i < this.state.items.length; i++){
+            if(this.state.items[i].id == this.state.selectedItem.id){
+                index = i;
+            }
+        }
+        this.state.items[index].posiitonX = target.value;
     }
     }
     changeY(e){
@@ -246,6 +310,13 @@ class EditScreen extends Component {
         this.setState({
             y: target.value
         })
+        var index = null;
+        for(var i = 0; i < this.state.items.length; i++){
+            if(this.state.items[i].id == this.state.selectedItem.id){
+                index = i;
+            }
+        }
+        this.state.items[index].positionY = target.value;
     }
     }
     changeThickness(e){
@@ -260,6 +331,13 @@ class EditScreen extends Component {
                 thickness: target.value
             })
             this.state.selectedItem.style.borderWidth = target.value+'px';
+            var index = null;
+            for(var i = 0; i < this.state.items.length; i++){
+                if(this.state.items[i].id == this.state.selectedItem.id){
+                    index = i;
+                }
+            }
+            this.state.items[index].borderWidth = target.value;
         }
     }
     changeText(e){
@@ -274,7 +352,56 @@ class EditScreen extends Component {
                 type: target.value
             })
             this.state.selectedItem.innerHTML = target.value;
+            var index = null;
+            for(var i = 0; i < this.state.items.length; i++){
+                if(this.state.items[i].id == this.state.selectedItem.id){
+                    index = i;
+                }
+            }
+            this.state.items[index].text = target.value;
         }
+    }
+    changeWidth(e){
+        e.preventDefault();
+        if(this.state.selectedItem){
+        const { target } = e;
+        this.setState(state => ({
+            ...state,
+            [target.id]: target.value,
+        }));
+        this.setState({
+            width: target.value
+        })
+        this.state.selectedItem.style.width = target.value;
+        var index = null;
+        for(var i = 0; i < this.state.items.length; i++){
+            if(this.state.items[i].id == this.state.selectedItem.id){
+                index = i;
+            }
+        }
+        this.state.items[index].width = target.value;
+    }
+    }
+    changeHeight(e){
+        e.preventDefault();
+        if(this.state.selectedItem){
+        const { target } = e;
+        this.setState(state => ({
+            ...state,
+            [target.id]: target.value,
+        }));
+        this.setState({
+            height: target.value
+        })
+        this.state.selectedItem.style.height = target.value;
+        var index = null;
+        for(var i = 0; i < this.state.items.length; i++){
+            if(this.state.items[i].id == this.state.selectedItem.id){
+                index = i;
+            }
+        }
+        this.state.items[index].height = target.value;
+    }
     }
     select(e){
         e.preventDefault();
@@ -299,8 +426,10 @@ class EditScreen extends Component {
                 color3: item.style.color,
                 thickness: width,
                 radius: radius,
-                X: this.state.X,
-                Y: this.state.Y,
+                X: this.state.x,
+                Y: this.state.y,
+                width: parseInt(e.target.parentElement.style.width.substring(0 ,e.target.parentElement.style.width.length - 2)),
+                height: parseInt(e.target.parentElement.style.height.substring(0 ,e.target.parentElement.style.height.length - 2))
             })
         }
     }
@@ -310,13 +439,6 @@ class EditScreen extends Component {
         const wireframe = this.props.wireframe;
         if (!auth.uid) {
             return <Redirect to="/" />;
-        }
-        if(wireframe && wireframe.pos != 0 && this.state.value){
-            this.state.value = false;
-
-        }
-        if(this.state.originalItem == null){
-            this.state.originalItem = wireframe.items
         }
         return (
             <div className="container white body" style={{borderStyle: 'solid', height:'758px', borderRadius: '10px', borderWidth: '3px'}}>
@@ -369,13 +491,11 @@ class EditScreen extends Component {
                         </div>
                     </div>
                     <div className="second_column col s10 m5" style={{borderStyle: 'solid', borderWidth: '3px', height:'600px'}}>
-                        <div className = "old_container">
-                        {wireframe.items && wireframe.items.map(function(item) {
-                                return <Draggable onStop = {this.handleDrag.bind(this)}><div id = {item.type} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness, fontSize: item.fontSize, backgroundColor: 
-                                item.backgroundColor, borderColor: item.borderColor, borderRadius: item.radius, width: item.width +'px', height: item.height +'px', textAlign: 'center', borderStyle:"solid"}}>{item.text}</div></Draggable>
+                        <div className = "old_container" id = "old_container">
+                        {this.state.items && this.state.items.map(function(item) {
+                                return <Rnd default ={{x: item.positionX, y: item.positionY}} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness, fontSize: item.fontSize, backgroundColor: 
+                                item.backgroundColor, borderColor: item.borderColor, width: item.width, height: item.height,  color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle:"solid", }}>{item.text}</div></Rnd>
                              }, this)}
-                        </div>
-                        <div className = "full_container" id ="full_container" style={{position: 'relative'}}>
                         </div>
                     </div>
                     <div className="col s5 m4" style={{borderStyle: 'solid', borderWidth: '3px', height:'600px'}}>
@@ -435,6 +555,18 @@ class EditScreen extends Component {
                         <div className="position_Y" style={{display: 'margin-right:10px'}}>
                             PositionY:
                             <input type="number" name="quantity" value ={this.state.y} onChange={this.changeY.bind(this)} style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} min="0" step="1"/>
+                        </div>
+                    </span>
+                    <span>
+                        <div className="width1" style={{display: 'margin-right:10px'}}>
+                            Width:
+                            <input type="number" name="quantity" value ={this.state.width} onChange = {this.changeWidth.bind(this)} style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} min="0" step="1"/>
+                        </div>
+                    </span>
+                    <span>
+                        <div className="height1" style={{display: 'margin-right:10px'}}>
+                            Height:
+                            <input type="number" name="quantity" value ={this.state.height} onChange = {this.changeHeight.bind(this)} style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} min="0" step="1"/>
                         </div>
                     </span>
                 </div>

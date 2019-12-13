@@ -14,7 +14,6 @@ class HomeScreen extends Component {
         if (!this.props.auth.uid) {
             return <Redirect to="/login" />;
         }
-
         return (
             <div className="dashboard container">
                 <div className="row">
