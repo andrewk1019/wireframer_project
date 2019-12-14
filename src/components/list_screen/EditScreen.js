@@ -140,9 +140,9 @@ class EditScreen extends Component {
                                         borderColor:'black', 
                                         thickness: 1, 
                                         text: '',
-                                        radius: 1,
+                                        radius: 5,
                                         width: 100,
-                                        height: 60,
+                                        height: 70,
                                         positionX: 0,
                                         positionY: 0,
                                         borderStyle: 'solid',
@@ -160,7 +160,7 @@ class EditScreen extends Component {
             render: true
         })
         this.state.items[this.state.items.length] = {type: 'Label', 
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         backgroundColor: 'white', 
                                         textColor: 'black',
                                         borderColor:'white', 
@@ -548,7 +548,7 @@ class EditScreen extends Component {
                         <div className = "old_container" id = "old_container" style={{borderStyle: 'solid',borderWidth: '3px', height:'600px'}}>
                         {this.state.items && this.state.items.map(function(item) {
                                 return <Rnd bounds={'parent'} default={{x: (item.positionX *2) , y: (item.positionY*2)}} position={{x:item.positionX*2, y:item.positionY * 2}} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness +'px', fontSize: item.fontSize +'pt', backgroundColor: 
-                                item.backgroundColor, borderColor: item.borderColor, width: item.width, left:this.state.x +'px', top: this.state.y +"px", height: item.height, color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle:"solid", }}>{item.text}</div></Rnd>
+                                item.backgroundColor, position: 'initial', borderColor: item.borderColor, width: item.width, left:this.state.x +'px', top: this.state.y +"px", height: item.height, color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle:"solid" }}>{item.text}</div></Rnd>
                              }, this)}
                         </div>
                     </div>
