@@ -7,6 +7,7 @@ import { firestoreConnect, reactReduxFirebase } from 'react-redux-firebase';
 import {moveToTopRegister } from '../../store/database/asynchHandler';
 import {getFirestore} from 'redux-firestore';
 import {Rnd} from 'react-rnd'
+import { Modal, Button } from 'react-materialize';
 
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 import { isTSEnumMember } from '@babel/types';
@@ -35,6 +36,7 @@ class EditScreen extends Component {
         wireframeHeight: 600,
         wireframeWidth: 0,
         id: null,
+        update: false,
 
     }
     changedTime = false;
@@ -122,10 +124,15 @@ class EditScreen extends Component {
         firestore.collection('wireframes').doc(this.props.wireframe.id).update({items:this.state.items});
         console.log("SAVED SUCCESSFULLY")
     }
+    saveAndClose(e){
+        e.preventDefault();
+        var firestore = getFirestore();
+        firestore.collection('wireframes').doc(this.props.wireframe.id).update({items:this.state.items});
+        this.props.history.push('/');
+    }
     close(e){
         e.preventDefault();
         this.props.history.push('/');
-        console.log("CLOSED SUCCESSFULLY")
     }
     
     createContainer(e){
@@ -434,28 +441,18 @@ class EditScreen extends Component {
         }
     }
     changeWidth(e){
-        e.preventDefault();
         const { target } = e;
         this.setState(state => ({
             ...state,
             [target.id]: target.value,
         }));
-        document.getElementById('old_container').style.width = target.value + 'px';
-        this.setState({
-            wireframeWidth: target.value
-        })
     }
     changeHeight(e){
-        e.preventDefault();
         const { target } = e;
         this.setState(state => ({
             ...state,
             [target.id]: target.value,
         }));
-        document.getElementById('old_container').style.height = target.value + 'px';
-        this.setState({
-            wireframeHeight: target.value
-        })
     }
     select(e){
         e.preventDefault();
@@ -518,7 +515,6 @@ class EditScreen extends Component {
         document.addEventListener('keydown',this.keyEvents.bind(this));
       }
     keyEvents(e){
-        e.preventDefault();
         if(e.keyCode == 46 && this.state.selectedItem != null){
             this.setState({
                 render: true
@@ -529,6 +525,7 @@ class EditScreen extends Component {
             })
         }
         else if(e.keyCode == '68' && e.ctrlKey && this.state.selectedItem != null){
+            e.preventDefault()
             var index = null;
             for(var i = 0; i < this.state.items.length; i++){
                 if(this.state.items[i].id == this.state.selectedItem.id){
@@ -563,6 +560,12 @@ class EditScreen extends Component {
         }
     
     }
+    dialog(e){
+        e.preventDefault();
+    }
+    openDialog(e){
+        e.preventDefault();
+    }
     render() {
         const auth = this.props.auth;
         const wireframe = this.props.wireframe;
@@ -593,11 +596,20 @@ class EditScreen extends Component {
                         <div className="zoom_out">
 
                         </div>
-                        <div className="save" onClick ={this.save.bind(this)}>
+                        <div className="save"onClick ={this.save.bind(this)}>
                             Save
                         </div> 
-                        <div className="close" onClick={this.close.bind(this)}>
-                            Close
+                        <div className="close" style={{left:'70%', paddingTop: '1.25%'}}  onClick={this.openDialog.bind(this)}>
+                            <Modal header = "Close" onClick = {this.dialog.bind(this)} actions = {<div>
+                                <Button onClick={this.saveAndClose.bind(this)}>Save</Button>
+                                <Button modal="close"  onClick={this.close.bind(this)}>Close</Button>
+                                    </div>}trigger={<div className="close" onClick={this.close.bind(this)}>Close</div>}>
+                                    <p></p>
+                                    <div id ="inner_text">Would you like to save your wireframe?
+                                    <div id = "inner_text">Old data will be lost.</div>
+                                    <p></p>
+                                    </div>
+                                </Modal>
                         </div>
                         </span>
                         <div id = "container" onClick={this.createContainer.bind(this)} style={{borderWidth: '1px', borderStyle: 'solid', position: 'relative', top:'-10%', height: '70px', width: '100px', left: '30%', borderRadius: '5px'}}>
@@ -691,6 +703,9 @@ class EditScreen extends Component {
                             <input type="number" name="quantity" value ={this.state.y} onChange={this.changeY.bind(this)} style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} min="0" step="1"/>
                         </div>
                     </span>
+                    <div className="dimension_name">
+                        Wireframe Dimensions:
+                    </div>
                     <span>
                         <div className="width1" style={{display: 'margin-right:10px'}}>
                             Width:
@@ -703,7 +718,7 @@ class EditScreen extends Component {
                             <input type="number" name="quantity" value ={this.state.wireframeHeight} onChange = {this.changeHeight.bind(this)} style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} min="0" step="1"/>
                         </div>
                     </span>
-                    <div className="Update" style={{borderStyle: "solid", width: '50%', height: '5%', marginLeft: '5%', fontSize: '14pt', textAlign: 'center', borderRadius: '5px', borderWidth: '1px', backgroundColor: 'grey'}}>
+                    <div className="Update" style={{borderStyle: "solid", width: '50%', height: '5%', fontSize: '14pt', textAlign: 'center', borderRadius: '5px', borderWidth: '1px', backgroundColor: 'grey'}}>
                             Update
                     </div>
                 </div>
