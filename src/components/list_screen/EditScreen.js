@@ -31,7 +31,9 @@ class EditScreen extends Component {
         height: 0,
         totalCount: this.props.wireframe.items.length,
         originalItem: null,
-        render: false
+        render: false,
+        wireframeHeight: document.getElementById('old_container') != null ? parseInt(document.getElementById('old_container').style.height.substring(0, document.getElementById('old_container').style.height.length -2)) : 0,
+        wireframeWidth: document.getElementById('old_container') != null ? parseInt(document.getElementById('old_container').style.width.substring(0, document.getElementById('old_container').style.width.length -2)) : 0,
 
     }
     changedTime = false;
@@ -413,45 +415,27 @@ class EditScreen extends Component {
     }
     changeWidth(e){
         e.preventDefault();
-        if(this.state.selectedItem){
         const { target } = e;
         this.setState(state => ({
             ...state,
             [target.id]: target.value,
         }));
-        var index = null;
-        for(var i = 0; i < this.state.items.length; i++){
-            if(this.state.items[i].id == this.state.selectedItem.id){
-                index = i;
-            }
-        }
-        this.state.items[index].width = target.value;
+        document.getElementById('old_container').style.width = target.value + 'px';
         this.setState({
-            width: target.value
+            wireframeWidth: target.value
         })
-        this.state.selectedItem.style.width = target.value;
-    }
     }
     changeHeight(e){
         e.preventDefault();
-        if(this.state.selectedItem){
         const { target } = e;
         this.setState(state => ({
             ...state,
             [target.id]: target.value,
         }));
-        var index = null;
-        for(var i = 0; i < this.state.items.length; i++){
-            if(this.state.items[i].id == this.state.selectedItem.id){
-                index = i;
-            }
-        }
-        this.state.items[index].height = target.value;
+        document.getElementById('old_container').style.height = target.value + 'px';
         this.setState({
-            height: target.value
+            wireframeHeight: target.value
         })
-        this.state.selectedItem.style.height = target.value;
-    }
     }
     select(e){
         e.preventDefault();
@@ -621,15 +605,18 @@ class EditScreen extends Component {
                     <span>
                         <div className="width1" style={{display: 'margin-right:10px'}}>
                             Width:
-                            <input type="number" name="quantity" value ={this.state.width} onChange = {this.changeWidth.bind(this)} style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} min="0" step="1"/>
+                            <input type="number" name="quantity" value ={this.state.wireframeWidth} onChange = {this.changeWidth.bind(this)} style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} min="0" step="1"/>
                         </div>
                     </span>
                     <span>
                         <div className="height1" style={{display: 'margin-right:10px'}}>
                             Height:
-                            <input type="number" name="quantity" value ={this.state.height} onChange = {this.changeHeight.bind(this)} style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} min="0" step="1"/>
+                            <input type="number" name="quantity" value ={this.state.wireframeHeight} onChange = {this.changeHeight.bind(this)} style={{height: '30px', width:"20%", position: 'relative', left: '5%', borderStyle: 'solid',borderBottom: "solid", borderWidth: '1px', borderRadius: '5px'}} min="0" step="1"/>
                         </div>
                     </span>
+                    <div className="Update" style={{borderStyle: "solid", width: '50%', height: '5%', marginLeft: '5%', fontSize: '14pt', textAlign: 'center', borderRadius: '5px', borderWidth: '1px', backgroundColor: 'grey'}}>
+                            Update
+                    </div>
                 </div>
                 </div>
             </div>
