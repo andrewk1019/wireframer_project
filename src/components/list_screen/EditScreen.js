@@ -32,8 +32,8 @@ class EditScreen extends Component {
         totalCount: this.props.wireframe.items.length,
         originalItem: null,
         render: false,
-        wireframeHeight: document.getElementById('old_container') != null ? parseInt(document.getElementById('old_container').style.height.substring(0, document.getElementById('old_container').style.height.length -2)) : 0,
-        wireframeWidth: document.getElementById('old_container') != null ? parseInt(document.getElementById('old_container').style.width.substring(0, document.getElementById('old_container').style.width.length -2)) : 0,
+        wireframeHeight: 600,
+        wireframeWidth: 0,
 
     }
     changedTime = false;
@@ -205,8 +205,11 @@ class EditScreen extends Component {
         })
     }
     handleDrag = (e, pos)=>{
-        e.preventDefault();
+        e.stopPropagation();
         if(this.state.selectedItem != null){
+            this.setState({
+                render: true
+            })
             this.state.selectedItem = e.target;
             this.setState({
                 x: pos.lastX - (pos.x/2),
@@ -222,12 +225,12 @@ class EditScreen extends Component {
                     this.state.items[index].positionY =  pos.lastY - (pos.y/2);
                 }
             }
+            this.state.render = false
     }
     
 
     handleResize = (e, direction, ref, delta, position) => {
-        e.preventDefault();
-        console.log(position)
+        e.stopPropagation();
         if(!this.state.selectedItem){
             this.state.selectedItem = e.target;
         }
@@ -475,6 +478,23 @@ class EditScreen extends Component {
         }
     }
 
+    unselect(e){
+        if(e.target.id == "old_container"){
+            this.setState({
+                selectedItem: null,
+                type: "",
+                font_size: 0,
+                color1: 'white',
+                color2: 'white',
+                color3: 'white',
+                thickness: 0,
+                radius: 0,
+                x: 0,
+                y: 0,
+            })
+        }
+        
+    }
     render() {
         const auth = this.props.auth;
         const wireframe = this.props.wireframe;
@@ -536,7 +556,7 @@ class EditScreen extends Component {
                         </div>
                     </div>
                     <div className="second_column col s10 m6" style={{left: '-100px', height:'600px'}}>
-                        <div className = "old_container" id = "old_container" style={{borderStyle: 'solid',borderWidth: '3px', height:'600px'}}>
+                        <div className = "old_container" id = "old_container" onClick={this.unselect.bind(this)} style={{borderStyle: 'solid',borderWidth: '3px', height:'600px'}}>
                         {this.state.items && this.state.items.map(function(item) {
                                 return <Rnd bounds={'parent'} default={{x: (item.positionX *2) , y: (item.positionY*2)}} position={{x:item.positionX*2, y:item.positionY * 2}} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness +'px', fontSize: item.fontSize +'pt', backgroundColor: 
                                 item.backgroundColor, position: 'initial', borderColor: item.borderColor, width: item.width, left:this.state.x +'px', top: this.state.y +"px", height: item.height, color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle:"solid" }}>{item.text}</div></Rnd>
@@ -618,7 +638,7 @@ class EditScreen extends Component {
                             Update
                     </div>
                 </div>
-                </div>
+                </div>7
             </div>
         );
     }
@@ -637,6 +657,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
+    update: (wireframe, owner) => dispatch(wireframe, owner)
 
 })
 
