@@ -76,6 +76,9 @@ div.banner {
 #textfield:hover{
   cursor: pointer;
 }
+.save:hover{
+  cursor: pointer;
+}
 .container1{
   border-width: '1px';
   border-style: 'solid';
@@ -137,9 +140,6 @@ div.banner {
   left: 75%;
   top: -12.9%;
   font-size: 10pt;
-}
-#textfield{
-  
 }
 .recentWorks{
   font-size: 20pt;

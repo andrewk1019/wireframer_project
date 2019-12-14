@@ -29,31 +29,13 @@ class DatabaseTester extends React.Component {
                     name: todoListJson.name,
                     owner: this.props.auth.email,
                     items: todoListJson.controls,
-                    pos: count++,
+                    time: Date.now(),
                 }).then(() => {
                     console.log("DATABASE RESET");
                 }).catch((err) => {
                     console.log(err);
                 });
         });
-    }
-    componentDidMount(){
-        /*if(this.props.auth.uid){
-            var owner = this.props.auth.email;
-            getFirestore().collection('users').get().then((querySnapshot) =>{
-                querySnapshot.forEach(function(doc) {
-                    if(doc.data().owner == owner){
-                        if(!doc.data().admin){
-                            this.state.admin = false;
-                        }
-                    }
-                }, this.state)
-              }, this.state);
-            if(!this.state.admin){
-                return <Redirect to="/" />;
-            }
-        }*/
-        return <Redirect to="/" />;
     }
     render() {
         if(this.props.auth.uid){

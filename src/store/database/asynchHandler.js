@@ -74,17 +74,10 @@ export const createRegister = (props) => (dispatch, getState, { getFirestore }) 
     name: "Unknown",
     owner: getState().firebase.auth.email,
     items: [],
-    pos: -1}).then(
+    time: new Date()}).then(
         function(docRef){
             props.push("/wireframe/"+ docRef.id);
     });
-  
-  fireStore.collection('wireframes').get().then(function(querySnapshot){
-    querySnapshot.forEach(function(doc) {
-        var position = doc.data().pos + 1;
-        fireStore.collection('wireframes').doc(doc.id).update({pos: position});
-    })
-  });
 };
 
 export const sortTaskRegister = (wireframe, bool) => (dispatch, getState, { getFirestore }) => {

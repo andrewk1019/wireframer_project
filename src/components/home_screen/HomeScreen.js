@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { NavLink, Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
-import TodoListLinks from './TodoListLinks';
+import WireframeLinks from './WireframeLinks';
 import { createRegister } from '../../store/database/asynchHandler'
 
 class HomeScreen extends Component {
@@ -17,10 +17,10 @@ class HomeScreen extends Component {
         return (
             <div className="dashboard container1">
                 <div className="row">
-                    <div className="col s14 m5">
+                    <div className="col s15 m5">
                         <div className = "recentWorks">
                             <b>Recent Work</b>
-                        <TodoListLinks />
+                        <WireframeLinks />
                         </div>
                     </div>
 
@@ -54,4 +54,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
+    firestoreConnect([
+        { collection: 'wireframes', orderBy: ['time', 'desc'] },
+    ]),
 )(HomeScreen);

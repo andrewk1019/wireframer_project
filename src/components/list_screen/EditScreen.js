@@ -4,11 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect, reactReduxFirebase } from 'react-redux-firebase';
-import { updateRegister } from '../../store/database/asynchHandler';
 import {moveToTopRegister } from '../../store/database/asynchHandler';
-import {sortTaskRegister } from '../../store/database/asynchHandler';
-import {sortDueDateRegister } from '../../store/database/asynchHandler';
-import {sortCompletedRegister } from '../../store/database/asynchHandler';
 import {getFirestore} from 'redux-firestore';
 import {Rnd} from 'react-rnd'
 
@@ -20,8 +16,6 @@ class EditScreen extends Component {
         owner: this.props.auth.email,
         prev: null,
         items: this.props.wireframe.items ? this.props.wireframe.items : [],
-        newItems: [],
-        newFields: [],
         selectedItem: null,
         type: '',
         font_size: 0,
@@ -40,6 +34,7 @@ class EditScreen extends Component {
         render: false
 
     }
+    changedTime = false;
 
     handleChange = (e) => {
         const { target } = e;
@@ -122,10 +117,12 @@ class EditScreen extends Component {
         e.preventDefault();
         var firestore = getFirestore();
         firestore.collection('wireframes').doc(this.props.wireframe.id).update({items:this.state.items});
+        console.log("SAVED SUCCESSFULLY")
     }
     close(e){
         e.preventDefault();
         this.props.history.push('/');
+        console.log("CLOSED SUCCESSFULLY")
     }
     
     createContainer(e){
@@ -252,6 +249,12 @@ class EditScreen extends Component {
             }
 
       }
+
+      updateTime = () => {
+        console.log("updating time")
+        let fireStore = getFirestore();
+        fireStore.collection('wireframes').doc(this.props.wireframe.id).update({ time: Date.now() })
+    }
     createTextfield(e){
         e.preventDefault();
         this.setState({
@@ -494,6 +497,10 @@ class EditScreen extends Component {
         if (!auth.uid) {
             return <Redirect to="/" />;
         }
+        if (!this.changedTime) {
+            this.changedTime = true;
+            this.updateTime();
+        }
         return (
             <div className="container0 white body" style={{borderStyle: 'solid', height:'758px', borderRadius: '10px', borderWidth: '3px'}}>
                 <div className="input-field">
@@ -643,11 +650,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    update: (wireframe, name) => dispatch(updateRegister(wireframe, name)),
-    top: (wireframe) => dispatch(moveToTopRegister(wireframe)),
-    sort_task: (wireframe, bool) => dispatch(sortTaskRegister(wireframe, bool)),
-    sort_due_date: (wireframe, bool) =>dispatch(sortDueDateRegister(wireframe, bool)),
-    sort_completed: (wireframe, bool) =>dispatch(sortCompletedRegister(wireframe, bool)),
+
 })
 
 export default compose(

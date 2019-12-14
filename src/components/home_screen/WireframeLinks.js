@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import WireframeCard from './WireframeCard';
 import { firestoreConnect } from 'react-redux-firebase';
 
-class wireframeLinks extends React.Component {
+class WireframeLinks extends React.Component {
     state={
         value: true
     }
@@ -40,6 +40,4 @@ const mapStateToProps = (state) => {
 };
 
 export default compose(connect(mapStateToProps),
-firestoreConnect([
-    { collection: 'wireframes',  orderBy:['pos'] },
-  ]),)(wireframeLinks);
+)(WireframeLinks);
