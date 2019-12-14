@@ -133,21 +133,21 @@ class EditScreen extends Component {
         this.setState({
             render: true
         })
-        this.state.items[this.state.items.length] = {type: 'Label', 
-                                        fontSize: 16,
+        this.state.items[this.state.items.length] = {type: 'Container', 
+                                        fontSize: 12,
                                         backgroundColor: 'white', 
                                         textColor: 'black',
-                                        borderColor:'white', 
-                                        thickness: '1px', 
-                                        text: 'Prompt for input:',
-                                        radius: '1px',
-                                        width: 200,
-                                        height: 25,
+                                        borderColor:'black', 
+                                        thickness: 1, 
+                                        text: '',
+                                        radius: 1,
+                                        width: 100,
+                                        height: 60,
                                         positionX: 0,
                                         positionY: 0,
                                         borderStyle: 'solid',
                                         textAlign: 'center',
-                                        id: "label" + this.state.totalCount++
+                                        id: "container" + this.state.totalCount++
                                      };
         this.setState({
             render: false
@@ -160,13 +160,13 @@ class EditScreen extends Component {
             render: true
         })
         this.state.items[this.state.items.length] = {type: 'Label', 
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         backgroundColor: 'white', 
                                         textColor: 'black',
                                         borderColor:'white', 
-                                        thickness: '1px', 
+                                        thickness: 1, 
                                         text: 'Prompt for input:',
-                                        radius: '1px',
+                                        radius: 1,
                                         width: 200,
                                         height: 25,
                                         positionX: 0,
@@ -186,13 +186,13 @@ class EditScreen extends Component {
             render: true
         })
         this.state.items[this.state.items.length] = {type: 'Button', 
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         backgroundColor: 'grey', 
                                         textColor: 'black',
                                         borderColor:'black', 
-                                        thickness: '1px', 
+                                        thickness: 1, 
                                         text: 'Submit',
-                                        radius: '5px',
+                                        radius: 5,
                                         width: 125,
                                         height: 35,
                                         positionX: 0,
@@ -207,7 +207,7 @@ class EditScreen extends Component {
     }
     handleDrag = (e, pos)=>{
         e.preventDefault();
-        if(this.state.selectedItem){
+        if(this.state.selectedItem != null){
             this.state.selectedItem = e.target;
             this.setState({
                 x: pos.lastX - (pos.x/2),
@@ -219,8 +219,8 @@ class EditScreen extends Component {
                     }
                 }
                 if(index != null){
-                    this.state.items[index].positionX =this.state.x;
-                    this.state.items[index].positionY = this.state.y;
+                    this.state.items[index].positionX = pos.lastX - (pos.x/2);
+                    this.state.items[index].positionY =  pos.lastY - (pos.y/2);
                 }
             }
     }
@@ -228,13 +228,15 @@ class EditScreen extends Component {
 
     handleResize = (e, direction, ref, delta, position) => {
         e.preventDefault();
+        console.log(position)
         if(!this.state.selectedItem){
             this.state.selectedItem = e.target;
         }
             this.setState({
             width: parseInt(ref.style.width.substring(0, ref.style.width.length - 2)),
             height: parseInt(ref.style.height.substring(0, ref.style.height.length - 2)),
-            ...position,
+            x: position.x/2,
+            y: position.y/2
             });
             var index = null;
             for(var i = 0; i < this.state.items.length; i++){
@@ -245,6 +247,8 @@ class EditScreen extends Component {
             if(index != null){
                 this.state.items[index].width = ref.style.width;
                 this.state.items[index].height = ref.style.height;
+                this.state.items[index].positionX = this.state.x;
+                this.state.items[index].positionY = this.state.y;
             }
 
       }
@@ -254,13 +258,13 @@ class EditScreen extends Component {
             render: true
         })
         this.state.items[this.state.items.length] = {type: 'Container', 
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         backgroundColor: 'white', 
                                         textColor: 'lightgrey',
                                         borderColor:'black', 
-                                        thickness: '1px', 
+                                        thickness: 1, 
                                         text: 'Input',
-                                        radius: '5px',
+                                        radius: 5,
                                         width: 180,
                                         height: 25,
                                         positionX: 0,
@@ -317,6 +321,9 @@ class EditScreen extends Component {
     }
     changeX(e){
         e.preventDefault();
+        this.setState({
+            render: true
+        })
         if(this.state.selectedItem){
         const { target } = e;
         this.setState(state => ({
@@ -326,14 +333,17 @@ class EditScreen extends Component {
         this.setState({
             x: target.value
         })
-        this.state.X = target.value;
         var index = null;
         for(var i = 0; i < this.state.items.length; i++){
             if(this.state.items[i].id == this.state.selectedItem.id){
                 index = i;
             }
         }
-        this.state.items[index].posiitonX = target.value;
+        this.state.items[index].positionX = target.value;
+        this.state.x = target.value;
+        this.setState({
+            render: false
+        })
     }
     }
     changeY(e){
@@ -344,9 +354,6 @@ class EditScreen extends Component {
             ...state,
             [target.id]: target.value,
         }));
-        this.setState({
-            y: target.value
-        })
         var index = null;
         for(var i = 0; i < this.state.items.length; i++){
             if(this.state.items[i].id == this.state.selectedItem.id){
@@ -354,6 +361,9 @@ class EditScreen extends Component {
             }
         }
         this.state.items[index].positionY = target.value;
+        this.setState({
+            y: target.value
+        })
     }
     }
     changeThickness(e){
@@ -374,7 +384,7 @@ class EditScreen extends Component {
                     index = i;
                 }
             }
-            this.state.items[index].borderWidth = target.value;
+            this.state.items[index].thickness = target.value;
         }
     }
     changeText(e){
@@ -442,7 +452,6 @@ class EditScreen extends Component {
     }
     select(e){
         e.preventDefault();
-        console.log(e.target)
         this.state.selectedItem = e.target;
         var item = this.state.selectedItem
         var fontSize  = item.style.fontSize;
@@ -456,10 +465,12 @@ class EditScreen extends Component {
         fontSize = parseInt(fontSize)
         var width1 = parseInt(item.style.width.substring(0,  item.style.width.length - 2))
         var height1 = parseInt(item.style.height.substring(0,  item.style.height.length - 2))
-        var position = item.parentNode.style.transform
-        var index = position.indexOf(',')
-        var x = parseInt(position.substring(10, index))
-        var y = parseInt(position.substring(index + 2,))
+        var index = null;
+        for(var i = 0; i < this.state.items.length; i++){
+            if(this.state.items[i].id == this.state.selectedItem.id){
+                index = i;
+            }
+        }
         if(this.state.selectedItem){
             this.setState({
                 type: e.target.innerHTML,
@@ -469,8 +480,8 @@ class EditScreen extends Component {
                 color3: item.style.color,
                 thickness: width,
                 radius: radius,
-                X: this.state.x,
-                Y: this.state.y,
+                x: this.state.items[index].positionX,
+                y: this.state.items[index].positionY,
                 width: width1,
                 height: height1,
             })
@@ -536,8 +547,8 @@ class EditScreen extends Component {
                     <div className="second_column col s10 m6" style={{left: '-100px', height:'600px'}}>
                         <div className = "old_container" id = "old_container" style={{borderStyle: 'solid',borderWidth: '3px', height:'600px'}}>
                         {this.state.items && this.state.items.map(function(item) {
-                                return <Rnd bounds={'parent'} default ={{x: item.positionX, y: item.positionY}} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness, fontSize: item.fontSize, backgroundColor: 
-                                item.backgroundColor, borderColor: item.borderColor, width: item.width, height: item.height, color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle:"solid", }}>{item.text}</div></Rnd>
+                                return <Rnd bounds={'parent'} default={{x: (item.positionX *2) , y: (item.positionY*2)}} position={{x:item.positionX*2, y:item.positionY * 2}} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness +'px', fontSize: item.fontSize +'pt', backgroundColor: 
+                                item.backgroundColor, borderColor: item.borderColor, width: item.width, left:this.state.x +'px', top: this.state.y +"px", height: item.height, color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle:"solid", }}>{item.text}</div></Rnd>
                              }, this)}
                         </div>
                     </div>
@@ -641,4 +652,4 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-)(EditScreen);
+)(EditScreen)
