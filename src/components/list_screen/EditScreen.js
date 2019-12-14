@@ -206,12 +206,10 @@ class EditScreen extends Component {
         })
     }
     handleDrag = (e, pos)=>{
-        e.stopPropagation();
         if(this.state.selectedItem != null){
             this.setState({
                 render: true
             })
-            this.state.selectedItem = e.target;
             this.setState({
                 x: pos.lastX - (pos.x/2),
                 y: pos.lastY - (pos.y/2)})
@@ -226,13 +224,31 @@ class EditScreen extends Component {
                     this.state.items[index].positionY =  pos.lastY - (pos.y/2);
                 }
             }
+        /*else{
+                this.setState({
+                    render: true
+                })
+                this.state.selectedItem = e.target;
+                this.setState({
+                    x: pos.lastX - (pos.x/2),
+                    y: pos.lastY - (pos.y/2)})
+                    var index = null;
+                    for(var i = 0; i < this.state.items.length; i++){
+                        if(this.state.items[i].id == this.state.selectedItem.id){
+                            index = i;
+                        }
+                    }
+                    if(index != null){
+                        this.state.items[index].positionX = pos.lastX - (pos.x/2);
+                        this.state.items[index].positionY =  pos.lastY - (pos.y/2);
+                    }
+        }*/
             this.state.render = false
     }
     
 
     handleResize = (e, direction, ref, delta, position) => {
-        e.stopPropagation();
-        if(!this.state.selectedItem){
+        if(!this.state.selectedItem !=null){
             this.state.selectedItem = e.target;
         }
             this.setState({
@@ -498,7 +514,10 @@ class EditScreen extends Component {
         }
         
     }
-    delete(e){
+    componentDidMount(){
+        document.addEventListener('keydown',this.keyEvents.bind(this));
+      }
+    keyEvents(e){
         e.preventDefault();
         if(e.keyCode == 46 && this.state.selectedItem != null){
             this.setState({
@@ -509,6 +528,40 @@ class EditScreen extends Component {
                 render: false
             })
         }
+        else if(e.keyCode == '68' && e.ctrlKey && this.state.selectedItem != null){
+            var index = null;
+            for(var i = 0; i < this.state.items.length; i++){
+                if(this.state.items[i].id == this.state.selectedItem.id){
+                    index = i;
+                }
+            }
+            if(this.state.id == this.state.items[index].id && !this.state.render){
+                this.setState({
+                    render: true
+                })
+                this.state.items[this.state.items.length] = {
+                    type: this.state.items[index].type, 
+                    fontSize: this.state.items[index].fontSize,
+                    backgroundColor: this.state.items[index].backgroundColor, 
+                    textColor: this.state.items[index].textColor,
+                    borderColor: this.state.items[index].borderColor, 
+                    thickness: this.state.items[index].thickness, 
+                    text: this.state.items[index].text,
+                    radius: this.state.items[index].radius,
+                    width: this.state.items[index].width,
+                    height: this.state.items[index].height,
+                    positionX: this.state.items[index].positionX + 100,
+                    positionY: this.state.items[index].positionY + 100,
+                    borderStyle: this.state.items[index].borderStyle,
+                    textAlign: this.state.items[index].textAlign,
+                    id: this.state.items[index].type.toLowerCase() + this.state.totalCount++
+                }
+            }
+            this.setState({
+                render: false
+            })
+        }
+    
     }
     render() {
         const auth = this.props.auth;
@@ -520,6 +573,7 @@ class EditScreen extends Component {
             this.changedTime = true;
             this.updateTime();
         }
+        
         return (
             <div className="container0 white body" style={{borderStyle: 'solid', height:'758px', borderRadius: '10px', borderWidth: '3px'}}>
                 <div className="input-field">
@@ -573,7 +627,7 @@ class EditScreen extends Component {
                     <div className="second_column col s10 m6" style={{left: '-100px', height:'600px'}}>
                         <div className = "old_container" id = "old_container" onClick={this.unselect.bind(this)} style={{borderStyle: 'solid',borderWidth: '3px', height:'600px'}}>
                         {this.state.items && this.state.items.map(function(item) {
-                                return <Rnd bounds={'parent'} default={{x: (item.positionX *2) , y: (item.positionY*2)}} position={{x:item.positionX*2, y:item.positionY * 2}} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onKeyDown={document.addEventListener("keydown",this.delete.bind(this))} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness +'px', fontSize: item.fontSize +'pt', backgroundColor: 
+                                return <Rnd bounds={'parent'} default={{x: (item.positionX *2) , y: (item.positionY*2)}} position={{x:item.positionX*2, y:item.positionY * 2}} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness +'px', fontSize: item.fontSize +'pt', backgroundColor: 
                                 item.backgroundColor, position: 'initial', borderColor: item.borderColor, width: item.width, left:this.state.x +'px', top: this.state.y +"px", height: item.height, color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle:"solid" }}>{item.text}</div></Rnd>
                              }, this)}
                         </div>
@@ -653,7 +707,7 @@ class EditScreen extends Component {
                             Update
                     </div>
                 </div>
-                </div>7
+                </div>
             </div>
         );
     }
