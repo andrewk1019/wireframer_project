@@ -34,6 +34,7 @@ class EditScreen extends Component {
         render: false,
         wireframeHeight: 600,
         wireframeWidth: 0,
+        id: null,
 
     }
     changedTime = false;
@@ -463,6 +464,7 @@ class EditScreen extends Component {
         }
         if(this.state.selectedItem){
             this.setState({
+                id: e.target.id,
                 type: e.target.innerHTML,
                 font_size: fontSize,
                 color1: item.style.backgroundColor,
@@ -489,11 +491,24 @@ class EditScreen extends Component {
                 color3: 'white',
                 thickness: 0,
                 radius: 0,
+                id: null,
                 x: 0,
                 y: 0,
             })
         }
         
+    }
+    delete(e){
+        e.preventDefault();
+        if(e.keyCode == 46 && this.state.selectedItem != null){
+            this.setState({
+                render: true
+            })
+            this.state.items = this.state.items.filter(item => item.id != this.state.id)
+            this.setState({
+                render: false
+            })
+        }
     }
     render() {
         const auth = this.props.auth;
@@ -558,7 +573,7 @@ class EditScreen extends Component {
                     <div className="second_column col s10 m6" style={{left: '-100px', height:'600px'}}>
                         <div className = "old_container" id = "old_container" onClick={this.unselect.bind(this)} style={{borderStyle: 'solid',borderWidth: '3px', height:'600px'}}>
                         {this.state.items && this.state.items.map(function(item) {
-                                return <Rnd bounds={'parent'} default={{x: (item.positionX *2) , y: (item.positionY*2)}} position={{x:item.positionX*2, y:item.positionY * 2}} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness +'px', fontSize: item.fontSize +'pt', backgroundColor: 
+                                return <Rnd bounds={'parent'} default={{x: (item.positionX *2) , y: (item.positionY*2)}} position={{x:item.positionX*2, y:item.positionY * 2}} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onKeyDown={document.addEventListener("keydown",this.delete.bind(this))} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness +'px', fontSize: item.fontSize +'pt', backgroundColor: 
                                 item.backgroundColor, position: 'initial', borderColor: item.borderColor, width: item.width, left:this.state.x +'px', top: this.state.y +"px", height: item.height, color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle:"solid" }}>{item.text}</div></Rnd>
                              }, this)}
                         </div>
