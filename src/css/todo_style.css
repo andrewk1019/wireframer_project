@@ -268,3 +268,6 @@ div.banner {
   transform: scale(1);
   transform-origin: 0 0;
 }
+.update{
+  cursor: pointer;
+}

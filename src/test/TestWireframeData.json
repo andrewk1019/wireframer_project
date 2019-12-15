@@ -2,6 +2,8 @@
     "wireframes": [
         {
             "name": "CSE 316 Home Page",
+            "width": 300,
+            "height": 300,
             "controls": [
                 {
                     "type": "Container",
@@ -60,6 +62,8 @@
         },
         {
             "name": "CSE 220 Class Page",
+            "width": 400,
+            "height": 400,
             "controls": [
                 {
                     "type": "Input",
@@ -117,6 +121,8 @@
         },
         {
             "name": "AMS 310 Course Schedule",
+            "width": 500,
+            "height": 500,
             "controls": [
                 {
                     "type": "Container",
