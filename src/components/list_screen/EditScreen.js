@@ -600,7 +600,6 @@ class EditScreen extends Component {
     }
 
     updateDim(e){
-        console.log(this.state.update)
         if(this.state.update){
             if(Number.isInteger(parseInt(this.state.wireframeWidth)) && parseInt(this.state.wireframeHeight) > 0 
             && parseInt(this.state.wireframeHeight)/8 < 5000 && Number.isInteger(parseInt(this.state.wireframeHeight)) > 0 
@@ -810,6 +809,12 @@ class EditScreen extends Component {
                         <div className="Update" style={{ borderStyle: "solid", width: '50%', opacity: this.state.wireOpacity, height: '5%', fontSize: '14pt', textAlign: 'center', borderRadius: '5px', borderWidth: '1px', backgroundColor: 'grey' }} onClick={this.updateDim.bind(this)}>
                             Update
                     </div>
+                    <span>
+                        <div className="Scale" style={{fontSize: '16pt'}}>
+                                <b>Scale: {this.state.zoom}x</b>
+    
+                        </div>
+                    </span>
                     </div>
                 </div>
             </div>
