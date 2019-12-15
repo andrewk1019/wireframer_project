@@ -54,6 +54,8 @@ class DatabaseTester extends React.Component {
             if(!this.state.admin){
                 return <Redirect to="/" />;
             }
+        }else{
+            return <Redirect to="/login" />
         }
         
         return (
