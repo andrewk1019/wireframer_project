@@ -632,11 +632,16 @@ class EditScreen extends Component {
     }
     selectItem(e){
         e.preventDefault();
-        if(this.selectedItem != null && this.selectedItem.id != e.target.id){
+        if(this.state.selectedItem != null && this.state.selectedItem.id != e.target.id){
+            console.log('hello1');
+            document.getElementById(this.state.selectedItem.id).children[0].style.opacity = 0;
+            document.getElementById(this.state.selectedItem.id).children[1].style.opacity = 0;
+            document.getElementById(this.state.selectedItem.id).children[2].style.opacity = 0;
+            document.getElementById(this.state.selectedItem.id).children[3].style.opacity = 0;
             this.setState({
                 selectedItem: e.target})
         }
-        else if(this.selectedItem == null){
+        else if(this.state.selectedItem == null){
             this.setState({
                 selectedItem: e.target})
         }
