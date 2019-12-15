@@ -264,3 +264,7 @@ div.banner {
   cursor: pointer;
   background-color: var(--swatch-complement);
 }
+#old_container{ 
+  transform: scale(1);
+  transform-origin: 0 0;
+}

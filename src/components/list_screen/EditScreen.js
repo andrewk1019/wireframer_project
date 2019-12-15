@@ -37,6 +37,7 @@ class EditScreen extends Component {
         wireframeWidth: 0,
         id: null,
         update: false,
+        zoom: 1
 
     }
     changedTime = false;
@@ -255,10 +256,10 @@ class EditScreen extends Component {
     
 
     handleResize = (e, direction, ref, delta, position) => {
-        if(!this.state.selectedItem !=null){
+        if(!this.state.selectedItem == null){
             this.state.selectedItem = e.target;
         }
-            this.setState({
+        this.setState({
             width: parseInt(ref.style.width.substring(0, ref.style.width.length - 2)),
             height: parseInt(ref.style.height.substring(0, ref.style.height.length - 2)),
             x: position.x/2,
@@ -566,6 +567,24 @@ class EditScreen extends Component {
     openDialog(e){
         e.preventDefault();
     }
+    zoomIn(e){
+        if(document.getElementById('old_container')){
+            var zoom = this.state.zoom * 2
+            document.getElementById('old_container').style.transform = 'scale(' + zoom + ')'
+            this.setState({
+                zoom: zoom
+            })
+        }
+    }
+    zoomOut(e){
+        if(document.getElementById('old_container')){
+            var zoom = this.state.zoom * 1/2
+            document.getElementById('old_container').style.transform = 'scale(' + zoom + ')'
+            this.setState({
+                zoom: zoom
+            })
+        }
+    }
     render() {
         const auth = this.props.auth;
         const wireframe = this.props.wireframe;
@@ -590,13 +609,13 @@ class EditScreen extends Component {
                 <div className="row">
                     <div className="col s12 m3" style={{borderStyle: 'solid', borderWidth: '3px', height:'600px'}} >
                         <span>
-                        <div className="zoom_in">
+                        <div className="zoom_in" onClick ={this.zoomIn.bind(this)}>
 
                         </div>
-                        <div className="zoom_out">
+                        <div className="zoom_out" onClick ={this.zoomOut.bind(this)}>
 
                         </div>
-                        <div className="save"onClick ={this.save.bind(this)}>
+                        <div className="save" onClick ={this.save.bind(this)}>
                             Save
                         </div> 
                         <div className="close" style={{left:'70%', paddingTop: '1.25%'}}  onClick={this.openDialog.bind(this)}>
@@ -636,11 +655,11 @@ class EditScreen extends Component {
                             <b>Textfield</b>
                         </div>
                     </div>
-                    <div className="second_column col s10 m6" style={{left: '-100px', height:'600px'}}>
+                    <div className="second_column col s10 m6" style={{overflow: 'auto'}}>
                         <div className = "old_container" id = "old_container" onClick={this.unselect.bind(this)} style={{borderStyle: 'solid',borderWidth: '3px', height:'600px'}}>
                         {this.state.items && this.state.items.map(function(item) {
-                                return <Rnd bounds={'parent'} default={{x: (item.positionX *2) , y: (item.positionY*2)}} position={{x:item.positionX*2, y:item.positionY * 2}} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness +'px', fontSize: item.fontSize +'pt', backgroundColor: 
-                                item.backgroundColor, position: 'initial', borderColor: item.borderColor, width: item.width, left:this.state.x +'px', top: this.state.y +"px", height: item.height, color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle:"solid" }}>{item.text}</div></Rnd>
+                                return <Rnd bounds={'parent'} default={{x: (item.positionX) , y: (item.positionY)}} position={{x:item.positionX*2, y:item.positionY * 2}}  scale={this.state.zoom} onResize={this.handleResize.bind(this)} onDrag = {this.handleDrag.bind(this)}><div id = {item.id} onClick = {this.select.bind(this)} style={{borderWidth: item.thickness +'px', fontSize: item.fontSize +'pt', backgroundColor: 
+                                item.backgroundColor, position: 'initial', borderColor: item.borderColor, width: item.width, height: item.height, color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle:"solid" }}>{item.text}</div></Rnd>
                              }, this)}
                         </div>
                     </div>
