@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { firestoreConnect, reactReduxFirebase } from 'react-redux-firebase';
-import { moveToTopRegister } from '../../store/database/asynchHandler';
+import { updateRegister } from '../../store/database/asynchHandler';
 import { getFirestore } from 'redux-firestore';
 import { Rnd } from 'react-rnd'
 import { Modal, Button } from 'react-materialize';
@@ -217,8 +216,6 @@ class EditScreen extends Component {
         })
     }
     handleDrag = (e, pos) => {
-        if (this.state.selectedItem != null && this.state.selectedItem.id == e.target.id) {
-            e.preventDefault();
             this.setState({
                 render: true
             })
@@ -236,47 +233,6 @@ class EditScreen extends Component {
                 this.state.items[index].positionX = pos.lastX - (pos.x / 2);
                 this.state.items[index].positionY = pos.lastY - (pos.y / 2);
             }
-        }
-        else if (this.state.selectedItem != null && this.state.selectedItem.id != e.target.id) {
-            this.setState({
-                render: true
-            })
-            this.setState({
-                x: pos.lastX - (pos.x / 2),
-                y: pos.lastY - (pos.y / 2)
-            })
-            var index = null;
-            for (var i = 0; i < this.state.items.length; i++) {
-                if (this.state.items[i].id == this.state.selectedItem.id) {
-                    index = i;
-                }
-            }
-            if (index != null) {
-                this.state.items[index].positionX = pos.lastX - (pos.x / 2);
-                this.state.items[index].positionY = pos.lastY - (pos.y / 2);
-            }
-        }
-        else {
-            this.setState({
-                render: true
-            })
-            this.state.selectedItem = e.target;
-            this.setState({
-                x: pos.lastX - (pos.x / 2),
-                y: pos.lastY - (pos.y / 2)
-            })
-            var index = null;
-            for (var i = 0; i < this.state.items.length; i++) {
-                if (this.state.items[i].id == this.state.selectedItem.id) {
-                    index = i;
-                }
-            }
-            if (index != null) {
-                this.state.items[index].positionX = pos.lastX - (pos.x / 2);
-                this.state.items[index].positionY = pos.lastY - (pos.y / 2);
-            }
-        }
-        this.state.render = false
     }
 
 
@@ -674,6 +630,18 @@ class EditScreen extends Component {
         update: false,
     })
     }
+    selectItem(e){
+        e.preventDefault();
+        console.log('hello')
+        if(this.selectedItem != null && this.selectedItem.id != e.target.id){
+            this.setState({
+                selectedItem: e.target})
+        }
+        else if(this.selectedItem == null){
+            this.setState({
+                selectedItem: e.target})
+        }
+    }
     render() {
         const auth = this.props.auth;
         const wireframe = this.props.wireframe;
@@ -747,7 +715,7 @@ class EditScreen extends Component {
                     <div className="second_column col s10 m6" style={{ overflow: 'auto'}}>
                         <div className="old_container" id="old_container" onClick={this.unselect.bind(this)} style={{ borderStyle: 'solid', borderWidth: '3px', height: this.state.wHeight +'px' , width: this.state.wWidth +'px' }}>
                             {this.state.items && this.state.items.map(function (item) {
-                                return <Rnd bounds={'parent'} default={{ x: (item.positionX), y: (item.positionY) }} position={{ x: item.positionX * 2, y: item.positionY * 2 }} scale={this.state.zoom} onResize={this.handleResize.bind(this)} onDrag={this.handleDrag.bind(this)}><div id={item.id} onClick={this.select.bind(this)} style={{
+                                return <Rnd bounds={'parent'} default={{ x: (item.positionX), y: (item.positionY) }} position={{ x: item.positionX * 2, y: item.positionY * 2 }} scale={this.state.zoom} onResize={this.handleResize.bind(this)} onDragStart={this.selectItem.bind(this)} onDrag={this.handleDrag.bind(this)}><div id={item.id} onClick={this.select.bind(this)} style={{
                                     borderWidth: item.thickness + 'px', fontSize: item.fontSize + 'pt', backgroundColor:
                                         item.backgroundColor, position: 'initial', borderColor: item.borderColor, width: item.width, height: item.height, color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle: "solid"
                                 }}>{item.text}<div id="top_left" style={{width: '10px', height: '10px',opacity:0, top:'-1%', left: '-1%', borderRadius: '2px', backgroundColor: 'white', position:'absolute', borderStyle:'solid', borderColor:"black", borderWidth: '1px'}}>
@@ -859,7 +827,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    update: (wireframe, owner) => dispatch(wireframe, owner)
+    update: (wireframe, owner) => dispatch(updateRegister(wireframe, owner))
 
 })
 
