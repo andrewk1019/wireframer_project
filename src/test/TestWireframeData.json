@@ -98,7 +98,7 @@
                     "positionY": 40,
                     "borderStyle": "solid",
                     "textAlign": "center",
-                    "id": "label-1"
+                    "id": "label-2"
                 },
                 {
                     "type": "Textfield",
@@ -115,7 +115,7 @@
                     "positionY": 20,
                     "borderStyle": "solid",
                     "textAlign": "center",
-                    "id": "textfield-1"
+                    "id": "textfield-2"
                 }
             ]
         },
@@ -138,7 +138,8 @@
                     "positionX": 30,
                     "positionY": 60,
                     "borderStyle": "solid",
-                    "textAlign": "center"
+                    "textAlign": "center",
+                    "id": "textfield-3"
 
                 },
                 {
@@ -155,7 +156,8 @@
                     "positionX": 70,
                     "positionY": 40,
                     "borderStyle": "solid",
-                    "textAlign": "center"
+                    "textAlign": "center",
+                    "id": "label-4"
                 },
                 {
                     "type": "Textfield",
@@ -171,7 +173,8 @@
                     "positionX": 80,
                     "positionY": 20,
                     "borderStyle": "solid",
-                    "textAlign": "center"
+                    "textAlign": "center",
+                    "id": "textfield-3"
                 }
             ]
         }

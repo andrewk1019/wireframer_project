@@ -603,7 +603,7 @@ class EditScreen extends Component {
         console.log(this.state.update)
         if(this.state.update){
             if(Number.isInteger(parseInt(this.state.wireframeWidth)) && parseInt(this.state.wireframeHeight) > 0 
-            && parseInt(this.state.wireframeHeight) < 5000/8 && Number.isInteger(parseInt(this.state.wireframeHeight)) > 0 
+            && parseInt(this.state.wireframeHeight)/8 < 5000 && Number.isInteger(parseInt(this.state.wireframeHeight)) > 0 
             && parseInt(this.state.wireframeWidth) > 0 && parseInt(this.state.wireframeWidth) < 5000/8){
                 this.setState({
                     wWidth: this.state.wireframeWidth,
@@ -618,7 +618,7 @@ class EditScreen extends Component {
                 })
             }
             else if(Number.isInteger(parseInt(this.state.wireframeHeight))
-             && parseInt(this.state.wireframeHeight) > 0 && parseInt(this.state.wireframeHeight) < 5000/80){
+             && parseInt(this.state.wireframeHeight) > 0 && parseInt(this.state.wireframeHeight) < 5000/8){
                 this.setState({
                     wHeight: this.state.wireframeHeight,
                     wireframeWidth: this.state.wWidth
@@ -632,7 +632,6 @@ class EditScreen extends Component {
     }
     selectItem(e){
         e.preventDefault();
-        console.log('hello')
         if(this.selectedItem != null && this.selectedItem.id != e.target.id){
             this.setState({
                 selectedItem: e.target})
