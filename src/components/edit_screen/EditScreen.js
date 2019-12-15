@@ -29,8 +29,8 @@ class EditScreen extends Component {
         totalCount: this.props.wireframe.items.length,
         originalItem: null,
         render: false,
-        wireframeHeight: this.props.wireframe.width / 8,
-        wireframeWidth: this.props.wireframe.height / 8,
+        wireframeHeight: this.props.wireframe.height / 8,
+        wireframeWidth: this.props.wireframe.width / 8,
         id: null,
         update: false,
         zoom: 1,
@@ -38,7 +38,9 @@ class EditScreen extends Component {
         wWidth: this.props.wireframe.width / 8,
         wHeight: this.props.wireframe.height / 8,
         wireframeWidth1: this.props.wireframe.width,
-        wireframeHeight1: this.props.wireframe.height
+        wireframeHeight1: this.props.wireframe.height,
+        update1: false,
+        update2: false,
 
     }
     changedTime = false;
@@ -264,7 +266,7 @@ class EditScreen extends Component {
         this.state.selectedItem.children[0].style.opacity = 1;
         this.state.selectedItem.children[1].style.opacity = 1;
         this.state.selectedItem.children[2].style.opacity = 1;
-        this.state.selectedItem.children[3].style.opacity = 1
+        this.state.selectedItem.children[3].style.opacity = 1;
     }
     }
 
@@ -340,7 +342,10 @@ class EditScreen extends Component {
                     index = i;
                 }
             }
-            this.state.items[index].borderRadius = target.value;
+            this.state.items[index].radius = target.value;
+            this.setState({
+                render: false
+            })
         }
     }
     changeX(e) {
@@ -440,11 +445,14 @@ class EditScreen extends Component {
             [target.id]: target.value,
         }));
         this.state.wireframeWidth1 = target.value;
-        if(Number.isInteger(parseFloat(this.state.wireframeWidth1)) && parseFloat(this.state.wireframeWidth1)/8 > 0 && parseFloat(this.state.wireframeWidth1)/8 < 625){
-            console.log('hello')
+        if(Number.isInteger(parseFloat(this.state.wireframeWidth1)) && parseFloat(this.state.wireframeWidth1)/8 > 0 && parseFloat(this.state.wireframeWidth1)/8 <= 625){
             this.state.wireframeWidth = target.value;
             this.state.wireOpacity = 1;
             this.state.update = true;
+            this.state.update1 = true;
+        }
+        else{
+            this.state.update1 = false;
         }
     }
     changeHeight(e) {
@@ -455,10 +463,14 @@ class EditScreen extends Component {
             [target.id]: target.value,
         }));
         this.state.wireframeHeight1 = target.value;
-        if(Number.isInteger(parseFloat(this.state.wireframeHeight1)) && parseFloat(this.state.wireframeHeight1)/8 > 0 && parseFloat(this.state.wireframeHeight1)/8 < 625){
+        if(Number.isInteger(parseFloat(this.state.wireframeHeight1)) && parseFloat(this.state.wireframeHeight1)/8 > 0 && parseFloat(this.state.wireframeHeight1)/8 <= 625){
             this.state.wireframeHeight = target.value;
             this.state.wireOpacity = 1;
             this.state.update = true;
+            this.state.update2 = true;
+        }
+        else{
+            this.state.update2 = false;
         }
     }
     select(e) {
@@ -546,7 +558,6 @@ class EditScreen extends Component {
         else if (e.keyCode == '68' && e.ctrlKey && this.state.selectedItem != null) {
             e.preventDefault()
             var index = null;
-            console.log(this.state.selectedItem)
             for (var i = 0; i < this.state.items.length; i++) {
                 if (this.state.items[i].id == this.state.selectedItem.id) {
                     index = i;
@@ -607,30 +618,17 @@ class EditScreen extends Component {
 
     updateDim(e){
         if(this.state.update){
-            if(Number.isInteger(parseFloat(this.state.wireframeWidth)) && parseFloat(this.state.wireframeHeight) > 0 
-            && parseFloat(this.state.wireframeHeight)/8 < 625  && Number.isInteger(parseFloat(this.state.wireframeHeight)) > 0 
-            && parseFloat(this.state.wireframeWidth) > 0 && parseFloat(this.state.wireframeWidth)/8 < 625){
-                console.log('yep')
+         if(Number.isInteger(parseFloat(this.state.wireframeWidth))
+            && parseFloat(this.state.wireframeWidth) > 0 && this.state.update1 && parseFloat(this.state.wireframeWidth)/8 <= 625 && this.state.wWidth != parseFloat(this.state.wireframeWidth)/8){
                 this.setState({
                     wWidth: parseFloat(this.state.wireframeWidth)/8,
-                    wHeight: parseFloat(this.state.wireframeHeight)/8,
                     wireOpacity: 0.4
                 })
             }
-            else if(Number.isInteger(parseFloat(this.state.wireframeWidth))
-            && parseFloat(this.state.wireframeWidth) > 0 && parseFloat(this.state.wireframeWidth)/8 < 625){
-                console.log(parseFloat('hello3'))
-                this.setState({
-                    wWidth: parseFloat(this.state.wireframeWidth)/8,
-                    wireframeHeight: this.state.wHeight,
-                    wireOpacity: 0.4
-                })
-            }
-            else if(Number.isInteger(parseFloat(this.state.wireframeHeight))&& parseFloat(this.state.wireframeHeight) > 0 && parseFloat(this.state.wireframeHeight)/8 < 625){
-                console.log(typeof(this.state.wireframeWidth))
+            if(Number.isInteger(parseFloat(this.state.wireframeHeight))&& parseFloat(this.state.wireframeHeight) > 0 && parseFloat(this.state.wireframeHeight)/8 <= 625
+            && this.state.wHeight != parseFloat(this.state.wireframeHeight)/8 && this.state.update2 && this.state.update2){
                 this.setState({
                     wHeight: parseFloat(this.state.wireframeHeight)/8,
-                    wireframeHeight: this.state.wHeight,
                     wireOpacity: 0.4
                 })
             }
@@ -730,7 +728,7 @@ class EditScreen extends Component {
                             {this.state.items && this.state.items.map(function (item) {
                                 return <Rnd bounds={'parent'} default={{ x: (item.positionX), y: (item.positionY) }} position={{ x: item.positionX * 2, y: item.positionY * 2 }} scale={this.state.zoom} onResize={this.handleResize.bind(this)} onDragStart={this.selectItem.bind(this)} onDrag={this.handleDrag.bind(this)}><div id={item.id} onClick={this.select.bind(this)} style={{
                                     borderWidth: item.thickness + 'px', fontSize: item.fontSize + 'pt', backgroundColor:
-                                        item.backgroundColor, position: 'initial', borderColor: item.borderColor, width: item.width, height: item.height, color: item.textColor, borderRadius: item.radius, textAlign: item.textAlign, borderStyle: "solid"
+                                        item.backgroundColor, position: 'initial', borderColor: item.borderColor, width: item.width, height: item.height, color: item.textColor, borderRadius: item.radius +'px', textAlign: item.textAlign, borderStyle: "solid"
                                 }}>{item.text}<div id="top_left" style={{width: '10px', height: '10px',opacity:0, top:'-1%', left: '-1%', borderRadius: '2px', backgroundColor: 'white', position:'absolute', borderStyle:'solid', borderColor:"black", borderWidth: '1px'}}>
                                 </div>
                                 <div id="bottom_left" style={{width: '10px', height: '10px',opacity:0, top:'98%', left: '-1%', borderRadius: '2px', backgroundColor: 'white', position:'absolute', borderStyle:'solid', borderColor:"black", borderWidth: '1px'}}>

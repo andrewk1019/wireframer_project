@@ -73,6 +73,8 @@ export const createRegister = (props) => (dispatch, getState, { getFirestore }) 
   fireStore.collection('wireframes').add({
     name: "Unknown",
     owner: getState().firebase.auth.email,
+    width: 4800,
+    height: 4800,
     items: [],
     time: new Date()}).then(
         function(docRef){
