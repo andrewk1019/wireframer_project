@@ -123,13 +123,13 @@ class EditScreen extends Component {
     save(e) {
         e.preventDefault();
         var firestore = getFirestore();
-        firestore.collection('wireframes').doc(this.props.wireframe.id).update({ items: this.state.items, width: this.state.wWidth, height: this.state.wHeight });
+        firestore.collection('wireframes').doc(this.props.wireframe.id).update({ items: this.state.items, width: this.state.wWidth*8, height: this.state.wHeight*8 });
         console.log("SAVED SUCCESSFULLY")
     }
     saveAndClose(e) {
         e.preventDefault();
         var firestore = getFirestore();
-        firestore.collection('wireframes').doc(this.props.wireframe.id).update({ items: this.state.items, width: this.state.wWidth, height: this.state.wHeight });
+        firestore.collection('wireframes').doc(this.props.wireframe.id).update({ items: this.state.items, width: this.state.wWidth*8, height: this.state.wHeight*8 });
         this.props.history.push('/');
     }
     close(e) {
@@ -244,8 +244,8 @@ class EditScreen extends Component {
         }
         if(this.state.selectedItem != null){
         this.setState({
-            width: parseInt(ref.style.width.substring(0, ref.style.width.length - 2)),
-            height: parseInt(ref.style.height.substring(0, ref.style.height.length - 2)),
+            width: parseFloat(ref.style.width.substring(0, ref.style.width.length - 2)),
+            height: parseFloat(ref.style.height.substring(0, ref.style.height.length - 2)),
             x: position.x / 2,
             y: position.y / 2
         });
@@ -310,14 +310,16 @@ class EditScreen extends Component {
             this.setState({
                 font_size: target.value
             })
-            this.state.selectedItem.style.fontSize = target.value + 'px';
-            var index = null;
-            for (var i = 0; i < this.state.items.length; i++) {
-                if (this.state.items[i].id == this.state.selectedItem.id) {
-                    index = i;
+            if((Number.isInteger(parseFloat(target.value))) && parseFloat(target.value) > 0 && this.state.selectedItem){
+                this.state.selectedItem.style.fontSize = target.value + 'px';
+                var index = null;
+                    for (var i = 0; i < this.state.items.length; i++) {
+                        if (this.state.items[i].id == this.state.selectedItem.id) {
+                            index = i;
+                        }
+                    }
+                    this.state.items[index].fontSize = target.value;
                 }
-            }
-            this.state.items[index].fontSize = target.value;
         }
     }
     changeRadius(e) {
@@ -438,7 +440,7 @@ class EditScreen extends Component {
             [target.id]: target.value,
         }));
         this.state.wireframeWidth1 = target.value;
-        if(Number.isInteger(parseInt(this.state.wireframeWidth1)) && parseInt(this.state.wireframeWidth1)/8 > 0 && parseInt(this.state.wireframeWidth1)/8 < 625){
+        if(Number.isInteger(parseFloat(this.state.wireframeWidth1)) && parseFloat(this.state.wireframeWidth1)/8 > 0 && parseFloat(this.state.wireframeWidth1)/8 < 625){
             console.log('hello')
             this.state.wireframeWidth = target.value;
             this.state.wireOpacity = 1;
@@ -453,7 +455,7 @@ class EditScreen extends Component {
             [target.id]: target.value,
         }));
         this.state.wireframeHeight1 = target.value;
-        if(Number.isInteger(parseInt(this.state.wireframeHeight1)) && parseInt(this.state.wireframeHeight1)/8 > 0 && parseInt(this.state.wireframeHeight1)/8 < 625){
+        if(Number.isInteger(parseFloat(this.state.wireframeHeight1)) && parseFloat(this.state.wireframeHeight1)/8 > 0 && parseFloat(this.state.wireframeHeight1)/8 < 625){
             this.state.wireframeHeight = target.value;
             this.state.wireOpacity = 1;
             this.state.update = true;
@@ -477,13 +479,13 @@ class EditScreen extends Component {
         var width = item.style.borderWidth;
         var radius = item.style.borderRadius;
         radius = radius.substring(0, radius.length - 2);
-        radius = parseInt(radius);
+        radius = parseFloat(radius);
         width = width.substring(0, width.length - 2);
-        width = parseInt(width);
+        width = parseFloat(width);
         fontSize = fontSize.substring(0, fontSize.length - 2)
-        fontSize = parseInt(fontSize)
-        var width1 = parseInt(item.style.width.substring(0, item.style.width.length - 2))
-        var height1 = parseInt(item.style.height.substring(0, item.style.height.length - 2))
+        fontSize = parseFloat(fontSize)
+        var width1 = parseFloat(item.style.width.substring(0, item.style.width.length - 2))
+        var height1 = parseFloat(item.style.height.substring(0, item.style.height.length - 2))
         var index = null;
         for (var i = 0; i < this.state.items.length; i++) {
             if (this.state.items[i].id == this.state.selectedItem.id) {
@@ -605,29 +607,29 @@ class EditScreen extends Component {
 
     updateDim(e){
         if(this.state.update){
-            if(Number.isInteger(parseInt(this.state.wireframeWidth)) && parseInt(this.state.wireframeHeight) > 0 
-            && parseInt(this.state.wireframeHeight)/8 < 625  && Number.isInteger(parseInt(this.state.wireframeHeight)) > 0 
-            && parseInt(this.state.wireframeWidth) > 0 && parseInt(this.state.wireframeWidth)/8 < 625){
+            if(Number.isInteger(parseFloat(this.state.wireframeWidth)) && parseFloat(this.state.wireframeHeight) > 0 
+            && parseFloat(this.state.wireframeHeight)/8 < 625  && Number.isInteger(parseFloat(this.state.wireframeHeight)) > 0 
+            && parseFloat(this.state.wireframeWidth) > 0 && parseFloat(this.state.wireframeWidth)/8 < 625){
                 console.log('yep')
                 this.setState({
-                    wWidth: parseInt(this.state.wireframeWidth)/8,
-                    wHeight: parseInt(this.state.wireframeHeight)/8,
+                    wWidth: parseFloat(this.state.wireframeWidth)/8,
+                    wHeight: parseFloat(this.state.wireframeHeight)/8,
                     wireOpacity: 0.4
                 })
             }
-            else if(Number.isInteger(parseInt(this.state.wireframeWidth))
-            && parseInt(this.state.wireframeWidth) > 0 && parseInt(this.state.wireframeWidth)/8 < 625){
-                console.log(parseInt('hello3'))
+            else if(Number.isInteger(parseFloat(this.state.wireframeWidth))
+            && parseFloat(this.state.wireframeWidth) > 0 && parseFloat(this.state.wireframeWidth)/8 < 625){
+                console.log(parseFloat('hello3'))
                 this.setState({
-                    wWidth: parseInt(this.state.wireframeWidth)/8,
+                    wWidth: parseFloat(this.state.wireframeWidth)/8,
                     wireframeHeight: this.state.wHeight,
                     wireOpacity: 0.4
                 })
             }
-            else if(Number.isInteger(parseInt(this.state.wireframeHeight))&& parseInt(this.state.wireframeHeight) > 0 && parseInt(this.state.wireframeHeight)/8 < 625){
+            else if(Number.isInteger(parseFloat(this.state.wireframeHeight))&& parseFloat(this.state.wireframeHeight) > 0 && parseFloat(this.state.wireframeHeight)/8 < 625){
                 console.log(typeof(this.state.wireframeWidth))
                 this.setState({
-                    wHeight: parseInt(this.state.wireframeHeight)/8,
+                    wHeight: parseFloat(this.state.wireframeHeight)/8,
                     wireframeHeight: this.state.wHeight,
                     wireOpacity: 0.4
                 })
@@ -749,7 +751,7 @@ class EditScreen extends Component {
                         <span>
                             <div className="font_size" style={{ display: 'margin-right:10px' }}>
                                 Font Size:
-                                <input type="number" name="quantity" onChange={this.changeFontSize.bind(this)} style={{ height: '30px', width: "20%", position: 'relative', left: '5%', borderStyle: 'solid', borderBottom: "solid", borderWidth: '1px', borderRadius: '5px' }} value={this.state.font_size} min="0" step="1" />
+                                <input type="number" disabled = {this.state.isInteger} onChange={this.changeFontSize.bind(this)} style={{ height: '30px', width: "20%", position: 'relative', left: '5%', borderStyle: 'solid', borderBottom: "solid", borderWidth: '1px', borderRadius: '5px' }} value={this.state.font_size} min="0" step="1" />
                             </div>
                         </span>
                         <span>
