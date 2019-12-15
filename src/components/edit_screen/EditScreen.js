@@ -563,7 +563,7 @@ class EditScreen extends Component {
                     index = i;
                 }
             }
-            if (this.state.id == this.state.items[index].id && !this.state.render) {
+            if (this.state.items[index] && this.state.id == this.state.items[index].id && !this.state.render) {
                 this.setState({
                     render: true
                 })
