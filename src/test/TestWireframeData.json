@@ -2,8 +2,8 @@
     "wireframes": [
         {
             "name": "CSE 316 Home Page",
-            "width": 300,
-            "height": 300,
+            "width": 3200,
+            "height": 3200,
             "controls": [
                 {
                     "type": "Container",
@@ -33,8 +33,8 @@
                     "text": "Type",
                     "thickness": 2,
                     "radius": 3,
-                    "width": 900,
-                    "height": 400,
+                    "width": 200,
+                    "height": 100,
                     "positionX": 20,
                     "positionY": 40,
                     "borderStyle": "solid",
@@ -62,8 +62,8 @@
         },
         {
             "name": "CSE 220 Class Page",
-            "width": 400,
-            "height": 400,
+            "width": 4200,
+            "height": 4200,
             "controls": [
                 {
                     "type": "Input",
@@ -121,8 +121,8 @@
         },
         {
             "name": "AMS 310 Course Schedule",
-            "width": 500,
-            "height": 500,
+            "width": 4500,
+            "height": 3500,
             "controls": [
                 {
                     "type": "Container",

@@ -29,14 +29,16 @@ class EditScreen extends Component {
         totalCount: this.props.wireframe.items.length,
         originalItem: null,
         render: false,
-        wireframeHeight: 600,
-        wireframeWidth: 600,
+        wireframeHeight: this.props.wireframe.width / 8,
+        wireframeWidth: this.props.wireframe.height / 8,
         id: null,
         update: false,
         zoom: 1,
-        wireOpacity: 0.7,
-        wWidth: 600,
-        wHeight: 600,
+        wireOpacity: 0.4,
+        wWidth: this.props.wireframe.width / 8,
+        wHeight: this.props.wireframe.height / 8,
+        wireframeWidth1: this.props.wireframe.width,
+        wireframeHeight1: this.props.wireframe.height
 
     }
     changedTime = false;
@@ -121,13 +123,13 @@ class EditScreen extends Component {
     save(e) {
         e.preventDefault();
         var firestore = getFirestore();
-        firestore.collection('wireframes').doc(this.props.wireframe.id).update({ items: this.state.items });
+        firestore.collection('wireframes').doc(this.props.wireframe.id).update({ items: this.state.items, width: this.state.wWidth, height: this.state.wHeight });
         console.log("SAVED SUCCESSFULLY")
     }
     saveAndClose(e) {
         e.preventDefault();
         var firestore = getFirestore();
-        firestore.collection('wireframes').doc(this.props.wireframe.id).update({ items: this.state.items });
+        firestore.collection('wireframes').doc(this.props.wireframe.id).update({ items: this.state.items, width: this.state.wWidth, height: this.state.wHeight });
         this.props.history.push('/');
     }
     close(e) {
@@ -435,12 +437,13 @@ class EditScreen extends Component {
             ...state,
             [target.id]: target.value,
         }));
-        this.state.wireframeWidth = target.value;
-        if(Number.isInteger(parseInt(this.state.wireframeWidth))){
+        this.state.wireframeWidth1 = target.value;
+        if(Number.isInteger(parseInt(this.state.wireframeWidth1)) && parseInt(this.state.wireframeWidth1)/8 > 0 && parseInt(this.state.wireframeWidth1)/8 < 625){
+            console.log('hello')
+            this.state.wireframeWidth = target.value;
             this.state.wireOpacity = 1;
             this.state.update = true;
         }
-
     }
     changeHeight(e) {
         e.preventDefault()
@@ -449,8 +452,9 @@ class EditScreen extends Component {
             ...state,
             [target.id]: target.value,
         }));
-        this.state.wireframeHeight = target.value;
-        if(Number.isInteger(parseInt(this.state.wireframeHeight))){
+        this.state.wireframeHeight1 = target.value;
+        if(Number.isInteger(parseInt(this.state.wireframeHeight1)) && parseInt(this.state.wireframeHeight1)/8 > 0 && parseInt(this.state.wireframeHeight1)/8 < 625){
+            this.state.wireframeHeight = target.value;
             this.state.wireOpacity = 1;
             this.state.update = true;
         }
@@ -540,6 +544,7 @@ class EditScreen extends Component {
         else if (e.keyCode == '68' && e.ctrlKey && this.state.selectedItem != null) {
             e.preventDefault()
             var index = null;
+            console.log(this.state.selectedItem)
             for (var i = 0; i < this.state.items.length; i++) {
                 if (this.state.items[i].id == this.state.selectedItem.id) {
                     index = i;
@@ -564,10 +569,9 @@ class EditScreen extends Component {
                     positionY: this.state.items[index].positionY + 100,
                     borderStyle: this.state.items[index].borderStyle,
                     textAlign: this.state.items[index].textAlign,
-                    id: this.state.items[index].type.toLowerCase() +  + '-' + this.state.totalCount++
+                    id: this.state.items[index].type.toLowerCase() + 'gg' + this.state.totalCount++ * 2
                 }
             }
-            console.log(this.state.fontSize)
             this.setState({
                 render: false
             })
@@ -602,25 +606,30 @@ class EditScreen extends Component {
     updateDim(e){
         if(this.state.update){
             if(Number.isInteger(parseInt(this.state.wireframeWidth)) && parseInt(this.state.wireframeHeight) > 0 
-            && parseInt(this.state.wireframeHeight)/8 < 5000 && Number.isInteger(parseInt(this.state.wireframeHeight)) > 0 
-            && parseInt(this.state.wireframeWidth) > 0 && parseInt(this.state.wireframeWidth) < 5000/8){
+            && parseInt(this.state.wireframeHeight)/8 < 625  && Number.isInteger(parseInt(this.state.wireframeHeight)) > 0 
+            && parseInt(this.state.wireframeWidth) > 0 && parseInt(this.state.wireframeWidth)/8 < 625){
+                console.log('yep')
                 this.setState({
-                    wWidth: this.state.wireframeWidth,
-                    wHeight: this.state.wireframeHeight
+                    wWidth: parseInt(this.state.wireframeWidth)/8,
+                    wHeight: parseInt(this.state.wireframeHeight)/8,
+                    wireOpacity: 0.4
                 })
             }
-            else if(Number.isInteger(parseInt(this.state.wireframeWidth)) 
-            && parseInt(this.state.wireframeWidth) > 0 && parseInt(this.state.wireframeWidth)){
+            else if(Number.isInteger(parseInt(this.state.wireframeWidth))
+            && parseInt(this.state.wireframeWidth) > 0 && parseInt(this.state.wireframeWidth)/8 < 625){
+                console.log(parseInt('hello3'))
                 this.setState({
-                    wWidth: this.state.wireframeWidth,
-                    wireframeHeight: this.state.wHeight
+                    wWidth: parseInt(this.state.wireframeWidth)/8,
+                    wireframeHeight: this.state.wHeight,
+                    wireOpacity: 0.4
                 })
             }
-            else if(Number.isInteger(parseInt(this.state.wireframeHeight))
-             && parseInt(this.state.wireframeHeight) > 0 && parseInt(this.state.wireframeHeight) < 5000/8){
+            else if(Number.isInteger(parseInt(this.state.wireframeHeight))&& parseInt(this.state.wireframeHeight) > 0 && parseInt(this.state.wireframeHeight)/8 < 625){
+                console.log(typeof(this.state.wireframeWidth))
                 this.setState({
-                    wHeight: this.state.wireframeHeight,
-                    wireframeWidth: this.state.wWidth
+                    wHeight: parseInt(this.state.wireframeHeight)/8,
+                    wireframeHeight: this.state.wHeight,
+                    wireOpacity: 0.4
                 })
             }
             
@@ -797,13 +806,13 @@ class EditScreen extends Component {
                         <span>
                             <div className="width1" style={{ display: 'margin-right:10px' }}>
                                 Width:
-                            <input type="number" name="quantity" value={this.state.wireframeWidth} onChange={this.changeWidth.bind(this)} style={{ height: '30px', width: "20%", position: 'relative', left: '5%', borderStyle: 'solid', borderBottom: "solid", borderWidth: '1px', borderRadius: '5px' }} min="0" step="1" />
+                            <input type="number" name="quantity" value={this.state.wireframeWidth1} onChange={this.changeWidth.bind(this)} style={{ height: '30px', width: "20%", position: 'relative', left: '5%', borderStyle: 'solid', borderBottom: "solid", borderWidth: '1px', borderRadius: '5px' }} min="0" step="1" />
                             </div>
                         </span>
                         <span>
                             <div className="height1" style={{ display: 'margin-right:10px' }}>
                                 Height:
-                            <input type="number" name="quantity" value={this.state.wireframeHeight} onChange={this.changeHeight.bind(this)} style={{ height: '30px', width: "20%", position: 'relative', left: '5%', borderStyle: 'solid', borderBottom: "solid", borderWidth: '1px', borderRadius: '5px' }} min="0" step="1" />
+                            <input type="number" name="quantity" value={this.state.wireframeHeight1} onChange={this.changeHeight.bind(this)} style={{ height: '30px', width: "20%", position: 'relative', left: '5%', borderStyle: 'solid', borderBottom: "solid", borderWidth: '1px', borderRadius: '5px' }} min="0" step="1" />
                             </div>
                         </span>
                         <div className="Update" style={{ borderStyle: "solid", width: '50%', opacity: this.state.wireOpacity, height: '5%', fontSize: '14pt', textAlign: 'center', borderRadius: '5px', borderWidth: '1px', backgroundColor: 'grey' }} onClick={this.updateDim.bind(this)}>

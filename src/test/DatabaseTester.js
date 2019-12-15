@@ -28,6 +28,8 @@ class DatabaseTester extends React.Component {
             fireStore.collection('wireframes').add({
                     name: todoListJson.name,
                     owner: this.props.auth.email,
+                    width: todoListJson.width,
+                    height: todoListJson.height,
                     items: todoListJson.controls,
                     time: Date.now(),
                 }).then(() => {
