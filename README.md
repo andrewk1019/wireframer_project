@@ -1,8 +1,4 @@
-<h1>Schedule Builder</h1>
-
-## Available Scripts
-
-In the project directory, you can run:
+<h1>Wireframer</h1> 
 
 ### `yarn start`
 
