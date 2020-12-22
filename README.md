@@ -1,4 +1,4 @@
-Schedule Builder
+<h1>Schedule Builder</h1>
 
 ## Available Scripts
 
